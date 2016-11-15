@@ -1,0 +1,114 @@
+audio {
+  position: fixed;
+  bottom: 10px;
+  z-index: 10;
+  width: 100%;
+}
+
+#audioplayer {
+	z-index: 9999;
+ 	width: 100%;
+  	position: absolute;
+  	background: #fff;
+  	height: 120px;
+  	padding-top: 10px;
+    top: -100px;
+    transition: 1s;
+}
+
+#playButton{
+	height:40px; 
+	width: 40px;
+	border: none;
+	background-size: 50% 50%;
+	background-position: center;
+	float: left;
+	cursor: pointer;
+	margin-top: 5px;
+}
+
+.play{ background: url('../img/play.png') no-repeat; }
+.pause{ background: url('../img/pause.png') no-repeat; }
+
+
+
+#timeline{
+	width: 82%;
+	height: 11px;
+	background: #ddd;
+	margin-top: 20px;
+	margin-right: 30px;
+	border-radius: 3px;
+	display: inline-block;
+	cursor: pointer;
+}
+
+#playtime{
+	font-family: helvetica, arial, sans;
+	float: right;
+	margin-left: 0px;
+	font-size: 12px;
+	color: #aaa;
+}
+
+#playhead{
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1px solid #fff;
+	margin-top: -3px;
+	background: rgba(200, 200, 200, 0.8);
+}
+
+#trackImage {
+	width: 90px;
+	height: 90px;
+	float: left;
+	background: #eee;
+	margin: 0 10px 0 10px;
+	display: inline-block;
+}
+
+
+
+#artistInfo, #artistInfo a, #trackInfo, #trackInfo a {
+	font-family: helvetica, arial, sans;
+	text-decoration: none;
+	color: #000;
+	margin-left: 10px;
+}
+
+#artistInfo {
+	font-weight: bold;
+	font-size: 16px;
+	line-height: 20px;
+}
+#trackInfo, #trackInfo a {
+	font-size: 18px;
+	line-height: 24px;
+	color: #37adea;
+}
+
+
+#artistInfo a:hover, #trackInfo a:hover {
+	text-decoration: underline;
+	color: orange;
+}
+
+
+#soundcloudLogo {
+	display: block;
+	margin: 18px 0 0 10px;
+}
+
+.wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100px; 
+}
+
+#audioplayer.wrapper:hover {
+    transition: 1s;
+    top: 0 !important;
+} 

@@ -1,0 +1,148 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline;
+}
+
+@font-face {
+  font-family: 'SquareFont';
+  src: url('SquareFont.eot');
+  src: url('../fonts/SquareFont.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/SquareFont.woff') format('woff'),
+    url('../fonts/SquareFont.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+html {
+  line-height: 1;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+q, blockquote {
+  quotes: none;
+}
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none;
+}
+
+a img {
+  border: none;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #f7f7f7;
+}
+
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-size: cover;
+  z-index: 0;
+}
+
+#canvas2 {
+  position: absolute;
+  top: 0;
+  left: -10000px;
+  bottom: 0;
+  right: 0;
+  background-size: cover;
+  z-index: 0;
+}
+
+
+.collection {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+}
+.collection a {
+  display: block;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  text-decoration: none;
+  font: 700 12px Consolas, system, monospace;
+  -webkit-transition: all 250ms linear;
+  transition: all 250ms linear;
+}
+.collection a:hover {
+  background: #fff;
+  color: #000;
+}
+.collection .prev {
+  text-align: left;
+  float: left;
+}
+.collection .next {
+  text-align: right;
+  float: right;
+}
+
+#selekta {
+  position: absolute;
+  top: 30px;
+  left: 50px;
+  z-index: 999;
+}
+
+#warning {
+  font: 700 12px Consolas, system, monospace;
+  color: #fff;
+  background: #c82222;
+  position: absolute;
+  bottom: 45%;
+  left: 0;
+  right: 0;
+  z-index: 10001;
+  text-align: center;
+  padding: 20px;
+  display: none;
+}
+
+#gui {
+  position: absolute;
+  z-index: 999;
+}
