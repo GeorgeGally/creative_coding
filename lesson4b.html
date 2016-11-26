@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var block_size = 20;
+
+var number_of_balls = 15;
+var balls = [];
+
+for (var i = 0; i < number_of_balls; i++) {
+  addBall();
+}
+
+console.log(balls);
+
+// think of an function like a machine
+function addBall(){
+
+  // we create a ball object - an object has properties
+  var ball = {
+    x:  width/2,
+    y: height/2,
+    speed_x: random(-15, 15),
+    speed_y: random(-15, 15),
+    size: random(10, 30),
+    c: rgb(random(200), random(200), random(50))
+  }
+
+  balls.push(ball);
+}
+
+
+function draw(){
+
+  // shortcut for clearing the screen,
+  // * takes a rgb value 255,255,255 or a grey value of 0-255
+  ctx.background(250);
+
+  for (var i = 0; i < number_of_balls; i++) {
+    b = balls[i];
+    b.x += b.speed_x;
+    b.y += b.speed_y;
+
+    // we adjust the hit area because shere is drawn from the centre
+    if (b.x > width - b.size/2  || b.x < b.size/2  ) {
+      b.speed_x = b.speed_x *-1;
+    }
+
+    if (b.y > height - b.size/2 || b.y < b.size/2 ) {
+      b.speed_y = b.speed_y *-1;
+    }
+
+    // ctx.fillStyle = "#00aeef";
+    ctx.fillStyle = b.c;
+    ctx.fillEllipse(b.x, b.y, b.size, b.size);
+
+  } // end for loop
+
+
+
+} // end draw
+
+
+</script>
+<!-- <script language="javascript" src="js/soundcloud.js"></script> -->
+</body>
+
+</html>

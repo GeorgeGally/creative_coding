@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+// BALL BOUNCES
+//BUT GOES OVER EDGES. FIX IT
+
+var ctx = createCanvas("canvas1");
+var block_size = 20;
+var x = width/2;
+var y = height/2;
+var speed_x = random(-5, 5);
+var speed_y = random(-5, 5);
+
+// much like processing this is the drawing loop that plays repeatedly
+// the actual syntax is a shortcut for requestAnimationFrame
+
+function draw(){
+
+  // shortcut for clearing the screen,
+  // takes a rgb value 255,255,255 or a grey value of 0-255
+  ctx.background(250);
+
+  x = x + speed_x;
+  y = y + speed_y;
+
+  if (x > width || x < 0 ) {
+    speed_x = speed_x *-1;
+  }
+
+  if (y > height || y < 0 ) {
+    speed_y = speed_y *-1;
+  }
+
+  ctx.fillStyle = "#00aeef";
+  ctx.fillRect(x, y, block_size, block_size);
+
+} // end draw
+
+
+</script>
+<!-- <script language="javascript" src="js/soundcloud.js"></script> -->
+</body>
+
+</html>

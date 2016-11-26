@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+// ARRAYS
+// NEATENING IT UP T)O GET READY FOR CLASS
+
+
+var ctx = createCanvas("canvas1");
+var block_size = 20;
+
+// we create a ball object
+// think of an object like a machine
+var ball = {
+  x:  width/2,
+  y: height/2,
+  speed_x: random(-5, 5),
+  speed_y: random(-5, 5),
+  size: 20
+}
+
+
+function draw(){
+
+  // shortcut for clearing the screen,
+  // * takes a rgb value 255,255,255 or a grey value of 0-255
+  ctx.background(250);
+
+  ball.x = ball.x + ball.speed_x;
+  ball.y = ball.y + ball.speed_y;
+
+  // we adjust the hit area because shere is drawn from the centre
+  if (ball.x > width - ball.size/2  || ball.x < ball.size/2  ) {
+    ball.speed_x = ball.speed_x *-1;
+  }
+
+  if (ball.y > height - ball.size/2 || ball.y < ball.size/2 ) {
+    ball.speed_y = ball.speed_y *-1;
+  }
+
+  ctx.fillStyle = "#00aeef";
+  ctx.fillEllipse(ball.x, ball.y, ball.size, ball.size);
+
+} // end draw
+
+
+</script>
+<!-- <script language="javascript" src="js/soundcloud.js"></script> -->
+</body>
+
+</html>
