@@ -444,14 +444,18 @@ function angle(cx, cy, ex, ey) {
   return theta;
 }
 
-function bounce(num, min, max) {
- if (num >= max || num <= min) {
- return 1;
- } else {
- return 0;
- }
+function bounce(num, min, max, sz) {
+  if (sz === undefined) {
+    sz = 0;
+  }
+  if (num >= max - sz/2 || num - sz/2 <= min ) {
+    return 1;
+  } else {
+    return 0;
+  }
  //return num > max ? -1 : num < min ? -1 : 1
 }
+
 
 // Adapted from https://github.com/psalaets/line-intersect/
 function checkIntersection( x1, y1, x2, y2, x3, y3, x4, y4 ) {

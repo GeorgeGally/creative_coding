@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+
+var particles = ["bob", "mary"];
+var number_particles = 20;
+
+
+
+function addParticle(){
+  // declare ball object
+  var ball = {
+    x: random(width),
+    y: random(height),
+    speed_x: random(-5, 5),
+    speed_y: random(-5, 5),
+    size: random(10, 55),
+    c: rgb(random(255), random(255), random(255))
+  }
+  particles.push(ball);
+}
+
+for (var i = 0; i < 10; i+=1) {
+  addParticle();
+}
+
+console.log(particles);
+
+
+// much like processing this is the drawing loop that plays repeatedly
+// the actual syntax is a shortcut for requestAnimationFrame
+
+function drawBall(_ball){
+  ctx.fillStyle = _ball.c;
+  // ctx.fillStyle = "#00aeef";
+  ctx.fillRect(_ball.x, _ball.y, _ball.size, _ball.size);
+}
+
+function updateBall(_ball){
+  _ball.x = _ball.x + _ball.speed_x;
+  _ball.y = _ball.y + _ball.speed_y;
+
+  if (_ball.x > width || _ball.x < 0 ) {
+    _ball.speed_x = _ball.speed_x *-1;
+  }
+
+  if (_ball.y > height || _ball.y < 0 ) {
+    _ball.speed_y = _ball.speed_y *-1;
+  }
+}
+
+function draw(){
+
+  //ctx.background(250);
+
+  for (var i = 0; i < 10; i+=1) {
+    var p = particles[i];
+    updateBall(p);
+    drawBall(p);
+  }
+
+} // end draw
+
+
+</script>
+<!-- <script language="javascript" src="js/soundcloud.js"></script> -->
+</body>
+
+</html>

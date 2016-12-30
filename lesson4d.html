@@ -18,7 +18,7 @@
 
 var ctx = createCanvas("canvas1");
 var block_size = 20;
-
+ctx.lineWidth = 2;
 var number_of_balls = 15;
 var balls = [];
 
@@ -37,7 +37,9 @@ function addBall(){
     y: height/2,
     speed_x: random(-5, 5),
     speed_y: random(-5, 5),
-    size: 60
+    size: randomInt(10, 50),
+    sides: randomInt(4,10),
+    c: rgb(random(255), 0, 0)
   }
 
   balls.push(ball);
@@ -65,10 +67,13 @@ function draw(){
       b.speed_y = b.speed_y *-1;
     }
 
-    ctx.fillStyle = rgb(255);
+    ctx.fillStyle = b.c;
     ctx.strokeStyle = rgb(0);
-    ctx.fillPolygon(b.x, b.y, 6, b.size);
-    ctx.strokePolygon(b.x, b.y, 6, b.size);
+    // x, y, num_sides, size
+
+    ctx.fillPolygon(b.x, b.y, b.sides, b.size);
+
+    ctx.strokePolygon(b.x, b.y, b.sides, b.size);
 
   } // end for loop
 

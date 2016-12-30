@@ -9,7 +9,6 @@
 <script language="javascript" src="js/vector.js"></script>
 <script language="javascript" src="js/video.js"></script>
 
-
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 <!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
@@ -62,7 +61,9 @@ function update(){
   for (var i = 0; i < motion.length; i++) {
     m = motion[i];
     addBall(m.x, m.y);
-    if (balls.lenth > maxballs) removeBall();
+    if (balls.length > maxballs) {
+    console.log("xxx");  removeBall();
+    }
   }
 
   for (var i = 0; i < balls.length; i++) {
@@ -104,6 +105,7 @@ function draw(){
 
 
 </script>
+
 <script language="javascript" src="js/motion_detection.js"></script>
 <!-- <script language="javascript" src="js/soundcloud.js"></script> -->
 </body>

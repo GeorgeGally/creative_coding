@@ -2,14 +2,14 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-
-<meta charset="utf-8">
-
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
 <script language="javascript" src="js/creative.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
 
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
 
 </head>
 <body>
@@ -23,18 +23,34 @@
 // and the screen height as "height" or "h"
 
 var ctx = createCanvas("canvas1");
-
-// much like processing this is the drawing loop that plays repeatedly
-// the actual syntax is a shortcut for requestAnimationFrame
+var block_size = 20;
+var ball_x = width/2;
+var ball_y = height/2;
+var speed_x = randomInt(-5, 5);
+var speed_y = randomInt(-5, 5);
 
 function draw(){
 
-  console.log("mouseX:" + mouseX + " mouseY: " + mouseY);
+  ctx.background(255);
 
-} // end draw
+  ball_x = ball_x + speed_x;
+  ball_y = ball_y + speed_y;
+
+  if (ball_x < 0 || ball_x > w) {
+    speed_x *= -1;
+  }
+  if (ball_y < 0 || ball_y > h) {
+    speed_y *= -1;
+  }
+
+  ctx.fillStyle = rgb(255,0,0);
+  ctx.fillEllipse(ball_x, ball_y, block_size, block_size);
+
+}
 
 
 </script>
+
 </body>
 
 </html>

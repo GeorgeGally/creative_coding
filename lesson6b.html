@@ -26,39 +26,44 @@ var frameRate = 60;
 var number_of_balls = 15;
 var balls = [];
 
-for (var i = 0; i < number_of_balls; i++) {
-  addBall();
-}
+// for (var i = 0; i < number_of_balls; i++) {
+//   addBall(random(w), random(h));
+// }
 
 console.log(balls);
 
 // think of an function like a machine
-function addBall(){
+function addBall(_x, _y){
 
   // we create a ball object - an object has properties
   var ball = {
-    x:  width/2,
-    y: height/2,
+    x:  _x,
+    y: _y,
     speed_x: random(-5, 5),
     speed_y: random(-5, 5),
     c: rgb(random(255), random(255), random(255)),
-    size: 20
+    size: block_size
   }
 
   balls.push(ball);
 }
 
-
+block_size = 20;
 function draw(){
 
   ctx.background(250, 0.1);
-  var motion = motionDetection(block_size);
+
+  console.log(motion);
   //ctx.drawImage(video, 0,0, w, h);
 
   ctx.fillStyle = "#00aeef";
+
+  // motion loop
+  var motion = motionDetection(block_size);
   for (var i = 0; i < motion.length; i++) {
     m = motion[i];
-    ctx.fillRect(m.x, m.y, block_size, block_size)
+    addBall(m.x, m.y);
+    //ctx.fillRect(m.x, m.y, block_size, block_size)
   }
 
   for (var i = 0; i < balls.length; i++) {

@@ -16,22 +16,21 @@
 
 <script>
 
-// this is a function (from canvas.js) that sets you the canvas
-// so you don't need to do any of the heavy lifting and can
-// start playing straight away
-// the function also lets you access the screen width as "width" or "w"
-// and the screen height as "height" or "h"
-
 var ctx = createCanvas("canvas1");
-
-// much like processing this is the drawing loop that plays repeatedly
-// the actual syntax is a shortcut for requestAnimationFrame
 
 function draw(){
 
-  console.log("mouseX:" + mouseX + " mouseY: " + mouseY);
+  if (mousePressed) {
 
-} // end draw
+    // setup stroke colour
+  ctx.strokeStyle = rgb(255, 0, 0);
+  // draw stroked rectangle
+  ctx.strokeRect(mouseX, mouseY, 20, 20);
+  // draw stroked circle
+  ctx.strokeEllipse(mouseX, mouseY, 20, 20);
+
+  }
+}
 
 
 </script>

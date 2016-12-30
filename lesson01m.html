@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+// this is a function (from canvas.js) that sets you the canvas
+// so you don't need to do any of the heavy lifting and can
+// start playing straight away
+// the function also lets you access the screen width as "width" or "w"
+// and the screen height as "height" or "h"
+
+var ctx = createCanvas("canvas1");
+var ball_size = 20;
+var ball_x = width/2;
+var ball_y = height/2;
+var speed_x = randomInt(-15, 15);
+var speed_y = randomInt(-15, 15);
+ctx.fillStyle = rgb(randomInt(255),randomInt(255),0);
+
+function draw(){
+
+  //ctx.background(255, 0.2);
+  //ctx.fillStyle = rgb(255,0,0);
+
+  ball_x = ball_x + speed_x;
+  ball_y = ball_y + speed_y;
+
+  if (bounce(ball_x, 0, w, ball_size)) {
+    speed_x *=-1;
+    ball_size = random(10, 50);
+    ctx.fillStyle = rgb(randomInt(255),randomInt(255),0);
+  }
+
+  if (bounce(ball_y, 0 ,h, ball_size)) {
+    speed_y *=-1;
+    ball_size = random(10, 50);
+    ctx.fillStyle = rgb(0, randomInt(255),randomInt(255));
+  }
+
+
+  ctx.fillEllipse(ball_x, ball_y, ball_size, ball_size);
+
+}
+
+
+</script>
+
+</body>
+
+</html>
