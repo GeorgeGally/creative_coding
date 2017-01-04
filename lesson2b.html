@@ -16,19 +16,17 @@
 
 <script>
 
-// this is a function (from canvas.js) that sets you the canvas
-// so you don't need to do any of the heavy lifting and can
-// start playing straight away
-// the function also lets you access the screen width as "width" or "w"
-// and the screen height as "height" or "h"
-
 var ctx = createCanvas("canvas1");
-var ball_size = 20;
-var ball_x = width/2;
-var ball_y = height/2;
-var speed_x = randomInt(-15, 15);
-var speed_y = randomInt(-15, 15);
-ctx.fillStyle = rgb(randomInt(255),randomInt(255),0);
+
+var ball = {
+  x:  width/2,
+  y: height/2,
+  speed_x: random(-5, 5),
+  speed_y: random(-5, 5),
+  size: 20,
+  colour: rgb(0)
+}
+
 
 function draw(){
 
@@ -40,24 +38,25 @@ function draw(){
 
 
 function moveBall(){
-  ball_x = ball_x + speed_x;
-  ball_y = ball_y + speed_y;
 
-  if (bounce(ball_x, 0, w, ball_size)) {
-    speed_x *=-1;
-    ball_size = random(10, 50);
+  if (bounce(ball.x, 0, w, ball.size)) {
+    ball.speed_x *=-1;
     ctx.fillStyle = rgb(randomInt(255),randomInt(255),0);
   }
 
-  if (bounce(ball_y, 0 ,h, ball_size)) {
-    speed_y *=-1;
-    ball_size = random(10, 50);
+  if (bounce(ball.y, 0 ,h, ball.size)) {
+    ball.speed_y *=-1;
     ctx.fillStyle = rgb(0, randomInt(255),randomInt(255));
   }
+
+  ball.x = ball.x + ball.speed_x;
+  ball.y = ball.y + ball.speed_y;
+
 }
 
+
 function drawBall(){
-  ctx.fillEllipse(ball_x, ball_y, ball_size, ball_size);
+  ctx.fillEllipse(ball.x, ball.y, ball.size, ball.size);
 }
 
 

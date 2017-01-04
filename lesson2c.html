@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var number_of_balls = 10;
+var balls = [];
+
+
+// push a ball and it's values into the array
+for (var i = 0; i < number_of_balls; i++) {
+  var ball = {
+    x:  width/2,
+    y: height/2,
+    speed_x: random(-5, 5),
+    speed_y: random(-5, 5),
+    size: 20,
+    colour: rgb(0)
+  }
+  balls.push(ball);
+}
+
+
+function draw(){
+
+  //ctx.background(255, 0.2);
+  //ctx.fillStyle = rgb(255,0,0);
+  moveBall();
+  drawBall();
+}
+
+
+function moveBall(){
+
+  for (var i = 0; i < balls.length; i++) {
+
+    balls[i].x = balls[i].x + balls[i].speed_x;
+    balls[i].y = balls[i].y + balls[i].speed_y;
+
+    if (bounce(balls[i].x, 0, w, balls[i].size)) {
+      balls[i].speed_x *=-1;
+      balls[i].colour = rgb(randomInt(55),randomInt(255),0);
+    }
+
+    if (bounce(balls[i].y, 0 ,h, balls[i].size)) {
+      balls[i].speed_y *=-1;
+      balls[i].colour = rgb(0, randomInt(255),randomInt(55));
+    }
+
+  }
+
+}
+
+
+function drawBall(){
+  for (var i = 0; i < balls.length; i++) {
+    ctx.fillStyle = balls[i].colour;
+    ctx.fillEllipse(balls[i].x, balls[i].y, balls[i].size, balls[i].size);
+  }
+}
+
+
+</script>
+
+</body>
+
+</html>

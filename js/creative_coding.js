@@ -912,6 +912,7 @@ var mouseX = 0,
  frameRate = 60,
  frameCount = frameNumber = 0,
  lastUpdate = Date.now(),
+ mouseMoved = false,
  mouseDown = false;
 
 function cjsloop() {
@@ -928,7 +929,8 @@ function cjsloop() {
  mouseSpeedY = mouseX - oldMouseX;
  lastMouseX = oldMouseX = mouseX;
  lastMouseY = oldMouseY = mouseY;
-    mouseReleased = 0;
+ mouseReleased = 0;
+ mouseMoved = 0;
  }
  requestAnimationFrame(cjsloop);
 
@@ -974,6 +976,7 @@ function init() {
 window.addEventListener('mousemove', function(e) {
   mouseX = e.clientX;
   mouseY = e.clientY;
+  mouseMoved = true;
 });
 
 window.addEventListener('mousedown', function(e){mouseDown =true; if(typeof onMouseDown == 'function') onMouseDown() ;});
