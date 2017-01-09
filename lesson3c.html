@@ -17,7 +17,8 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var max_balls = 2000;
+ctx.lineWidth = 4;
+var max_balls = 1000;
 var balls = [];
 
 for (var i = 0; i < max_balls; i++) {
@@ -30,8 +31,8 @@ function addBall(){
     x: random(w),
     y: random(-200,0),
     speed_x: 0,
-    speed_y: random(0.5, 3),
-    size: 8,
+    speed_y: random(0.5, 6),
+    size: randomInt(15, 120),
     colour: rgb(random(255))
   }
   balls.push(ball);
@@ -40,7 +41,7 @@ function addBall(){
 
 function draw(){
 
-  ctx.background(0, 0.06);
+  ctx.background(0, 0.6);
 
   moveBall();
   drawBall();
@@ -54,21 +55,26 @@ function moveBall(){
     b.x = b.x + b.speed_x;
     b.y = b.y + b.speed_y;
 
-    if (b.y>h) {
-      b.y = random(-100,0);
-      b.colour = rgb(randomInt(255));
+    if (b.y > h) {
+      resetBall(b);
     }
 
   }
 
 }
 
+function resetBall(b){
+  b.y = random(-100,0);
+  b.colour = rgb(randomInt(255));
+}
 
 function drawBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     ctx.fillStyle = b.colour;
     ctx.fillEllipse(b.x, b.y, b.size, b.size);
+    ctx.strokeStyle = "white";
+    ctx.strokeEllipse(b.x, b.y, b.size, b.size);
   }
 }
 

@@ -151,7 +151,6 @@ p.line = function (x1, y1, x2, y2){
 
 
 p.strokePolygon = function (x, y, sides, size) {
- 'use strict';
  this.polygon(x, y, sides, size);
  this.stroke();
 }
@@ -162,13 +161,12 @@ p.fillPolygon = function (x, y, sides, size){
  this.fill();
 }
 
-p.polygon = function (x, y, sides, size){
- Xcenter = x;
- Ycenter = y;
+
+p.polygon = function (_x, _y, sides, size){
  this.beginPath();
- this.moveTo (Xcenter +  size * Math.cos(0), Ycenter +  size *  Math.sin(0));
+ this.moveTo (_x +  size * Math.cos(0), _y +  size *  Math.sin(0));
  for (var i = 1; i <= sides; i += 1) {
-    this.lineTo (Xcenter + size * Math.cos(i * 2 * Math.PI / sides), Ycenter + size * Math.sin(i * 2 * Math.PI / sides));
+    this.lineTo (_x + size * Math.cos(i * 2 * Math.PI / sides), _y + size * Math.sin(i * 2 * Math.PI / sides));
   }
 }
 
@@ -246,6 +244,14 @@ p.background = function (r, g, b, a){
  }
  this.fillRect(0, 0, w, h);
 };
+
+p.rotateDegrees = function(deg){
+  this.rotate(radians(deg));
+}
+
+p.rotateDeg = function(deg){
+  this.rotate(radians(deg));
+}
 
 function radians(deg) {return deg*Math.PI/180;};
 
@@ -374,13 +380,7 @@ function hslToRgb(h, s, l){
 }
 
 
-function randomInt(min, max) {
- if(max===undefined) {
- max = min;
- min = 0;
- }
- return Math.floor(Math.random() * (max+1-min)) +min;
-}
+
 
 
 
@@ -419,6 +419,28 @@ function random(min, max) {
  }
  return (Math.random() * (max-min)) + min;
 };
+
+
+function randomP(min, max) {
+ if(min===undefined) {
+  min = 0.1;
+  max = 1;
+ } else if(max=== undefined) {
+  max = min;
+  min = 0.1;
+ }
+ return (Math.random() * (max-min)) + min;
+};
+
+
+function randomInt(min, max) {
+ if(max===undefined) {
+ max = min;
+ min = 0;
+ }
+ return Math.floor(Math.random() * (max+1-min)) +min;
+}
+
 
 function tween(pos, target, speed){
  if (speed == undefined) speed = 20;

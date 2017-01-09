@@ -191,4 +191,3 @@ Vector.angleBetween = function(a, b) {
 // Victor.length = function () {
 //   return Math.sqrt(this.lengthSq());
 // };
-

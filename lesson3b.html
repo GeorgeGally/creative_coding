@@ -54,15 +54,18 @@ function moveBall(){
     b.x = b.x + b.speed_x;
     b.y = b.y + b.speed_y;
 
-    if (b.y>h) {
-      b.y = random(-100,0);
-      b.colour = rgb(randomInt(255));
+    if (b.y > h) {
+      resetBall(b);
     }
 
   }
 
 }
 
+function resetBall(b){
+  b.y = random(-100,0);
+  b.colour = rgb(randomInt(255));
+}
 
 function drawBall(){
   for (var i = 0; i < balls.length; i++) {
