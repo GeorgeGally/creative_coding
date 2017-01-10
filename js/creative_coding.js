@@ -162,6 +162,14 @@ p.fillPolygon = function (x, y, sides, size){
 }
 
 
+p.outlinedPolygon = function (_x, _y, _sides, _size, _fill, _stroke){
+  this.fillStyle = _fill;
+  this.fillPolygon(_x, _y, _sides, _size);
+  this.strokeStyle = _stroke;
+  this.strokePolygon(_x, _y, _sides, _size);
+}
+
+
 p.polygon = function (_x, _y, sides, size){
  this.beginPath();
  this.moveTo (_x +  size * Math.cos(0), _y +  size *  Math.sin(0));

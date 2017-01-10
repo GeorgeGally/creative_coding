@@ -2,14 +2,12 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-    <meta charset="utf-8">
-<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
 
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
 
 </head>
 <body>
@@ -18,8 +16,7 @@
 
 var ctx = createCanvas("canvas1");
 var block_size = 20;
-var rect_size = 60;
-
+ctx.lineWidth = 2;
 var number_of_balls = 15;
 var balls = [];
 
@@ -29,16 +26,17 @@ for (var i = 0; i < number_of_balls; i++) {
 
 console.log(balls);
 
-// think of an function like a machine
 function addBall(){
 
-  // we create a ball object - an object has properties
+  // we create a ball particle object - an object has properties
   var ball = {
     x:  width/2,
     y: height/2,
     speed_x: random(-5, 5),
     speed_y: random(-5, 5),
-    size: 20
+    size: randomInt(10, 50),
+    sides: randomInt(4,10),
+    c: rgb(random(255), 0, 0)
   }
 
   balls.push(ball);
@@ -47,11 +45,7 @@ function addBall(){
 
 function draw(){
 
-  ctx.background(250);
-
-  ctx.fillStyle = "#00aeef"
-  // ctx.fillRect(mouseX -rect_size/2, mouseY -rect_size/2, rect_size, rect_size);
-  ctx.centreFillRect(mouseX, mouseY, rect_size, rect_size);
+  //ctx.background(250, 0.1);
 
   for (var i = 0; i < number_of_balls; i++) {
     b = balls[i];
@@ -68,20 +62,20 @@ function draw(){
       b.speed_y = b.speed_y *-1;
     }
 
-    ctx.fillStyle = rgb(0);
-    ctx.fillEllipse(b.x, b.y, b.size, b.size);
+    ctx.strokeStyle = rgb(0);
+    // x, y, num_sides, size
+
+    ctx.outlinedPolygon(b.x, b.y, b.sides, b.size, "black", "white");
 
 
   } // end for loop
 
-  //pixelate(10);
 } // end draw
 
 
 
 
 </script>
-<!-- <script language="javascript" src="js/soundcloud.js"></script> -->
 </body>
 
 </html>
