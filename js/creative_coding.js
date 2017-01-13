@@ -6,12 +6,13 @@ var p = CanvasRenderingContext2D.prototype;
 
 p.colour = function (r, g, b, a){
   'use strict';
-  this.fillStyle = this.getColour(r, g, b, a);
+  var c = this.getColour(r, g, b, a);
+  this.fillStyle = c;
 };
 
 
 p.lineColour = function (r, g, b, a){
-  'use strict';
+  console.log(r);
   this.strokeStyle = this.getColour(r, g, b, a);
 };
 
@@ -21,7 +22,7 @@ p.colourName = function (c){
 };
 
 p.getColour = function (r, g, b, a){
-  'use strict';
+
   if (g == undefined) {
     c = rgb(r, r, r);
 
