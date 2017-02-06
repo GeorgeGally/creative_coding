@@ -2,14 +2,13 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-    <meta charset="utf-8">
-<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+<meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
 
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
+
 
 </head>
 <body>
@@ -17,24 +16,24 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var number_of_balls = 5;
+var number_of_balls = 10;
 var balls = [];
-// radius of our circle
 var radius = 200;
+ctx.lineWidth = 1;
 
 // push a ball and it's values into the array
 for (var i = 0; i < number_of_balls; i++) {
-  addBall();
+  addBall(i);
 }
 
 
-function addBall(){
+function addBall(i){
   var ball = {
-    x: 0,
-    y: 0,
-    speed_x: random(1),
+    x: i * w/number_of_balls,
+    y: random(h),
+    speed_x: random(2),
     speed_y: random(1),
-    size: random(20, 80),
+    size: random(10, 50),
     colour: rgb(0),
     angle: random(360)
   }
@@ -42,9 +41,8 @@ function addBall(){
 }
 
 function draw(){
-  ctx.background(245, 1);
-  ctx.fillStyle = "black";
-  ctx.HfillEllipse(w/2, h/2, radius*2);
+
+  ctx.background(220, 0.03);
   moveBall();
   drawBall();
 }
@@ -54,10 +52,12 @@ function moveBall(){
 
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
-    // move the angle to rotate the balls
     b.angle += b.speed_x;
-    b.x = w/2 + Math.cos(radians(b.angle))*(radius+b.size/2);
-    b.y = h/2 + Math.sin(radians(b.angle))*(radius+b.size/2);
+    b.rotation += 2;
+    b.y = h/2 + Math.cos(radians(b.angle))*h/2;
+    b.x+=b.speed_x;
+    if(bounce(b.x, 0,w)) b.speed_x *=-1;
+    if (i>0) ctx.line(b.x,b.y, balls[i-1].x, balls[i-1].y);
   }
 
 }
@@ -67,7 +67,7 @@ function drawBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.size);
+    //ctx.fillEllipse(b.x, b.y, b.size);
   }
 }
 

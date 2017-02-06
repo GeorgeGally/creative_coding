@@ -272,6 +272,11 @@ function degreesToPoint(deg, diameter) {
     return {x: r * Math.cos(rad), y: r * Math.sin(rad)};
 }
 
+function distributeAngles(me, total) {
+    return me/total * 360;
+}
+
+
 
 function xyz(px, py, pz, pitch, roll, yaw) {
 

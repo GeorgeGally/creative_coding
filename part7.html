@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+
+var ball = {
+    x: 0,
+    y: h/2,
+    speed_x: random(2),
+    speed_y: random(1),
+    size: 50,
+    colour: rgb(0),
+    angle: random(360)
+  }
+
+
+function draw(){
+  ctx.background(255);
+  ball.angle += ball.speed_x;
+  ball.rotation += 2;
+  ball.x = w/2 + Math.cos(radians(ball.angle))*w/2;
+  ctx.fillStyle = ball.colour;
+  ctx.fillEllipse(ball.x, ball.y, ball.size);
+}
+
+
+</script>
+
+</body>
+
+</html>

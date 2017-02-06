@@ -19,8 +19,8 @@
 var ctx = createCanvas("canvas1");
 var number_of_balls = 5;
 var balls = [];
+// radius of our circle
 var radius = 200;
-ctx.lineWidth = 1;
 
 // push a ball and it's values into the array
 for (var i = 0; i < number_of_balls; i++) {
@@ -32,8 +32,7 @@ function addBall(){
   var ball = {
     x: 0,
     y: 0,
-    speed_x: random(1),
-    speed_y: random(1),
+    speed: random(1),
     size: random(10, 50),
     colour: rgb(0),
     angle: random(360)
@@ -43,7 +42,7 @@ function addBall(){
 
 function draw(){
 
-  ctx.background(255, 1);
+  ctx.background(245, 1);
   moveBall();
   drawBall();
 }
@@ -53,11 +52,10 @@ function moveBall(){
 
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
-    b.angle += b.speed_x;
-    b.rotation += 2;
+    // move the angle to rotate the balls
+    b.angle += b.speed;
     b.x = w/2 + Math.cos(radians(b.angle))*radius;
     b.y = h/2 + Math.sin(radians(b.angle))*radius;
-
   }
 
 }

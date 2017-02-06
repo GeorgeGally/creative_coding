@@ -2,14 +2,13 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-    <meta charset="utf-8">
-<!-- <script src='http://connect.soundcloud.com/sdk.js'></script> -->
+  <meta charset="utf-8">
+
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-
+<script language="javascript" src="js/vector.js"></script>
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-<!-- <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" /> -->
 
 </head>
 <body>
@@ -17,80 +16,81 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var number_of_balls = 55;
-var balls = [];
-var radius = 200;
-ctx.lineWidth = 0.5;
 
-// push a ball and it's values into the array
-for (var i = 0; i < number_of_balls; i++) {
-  addBall();
+// create two particle arrays
+var inners = {
+  count: 3,
+  radius: 220,
+  speed: random(2)/100,
+  particles: []
+};
+
+var outers = {
+  count: 3,
+  radius: 100,
+  speed: random(-2)/100,
+  particles: []
+};
+
+for (var i = 0; i < outers.count; i++) {
+  addParticle(i, outers);
+}
+
+for (var i = 0; i < inners.count; i++) {
+  addParticle(i, inners);
 }
 
 
-function addBall(){
-  var ball = {
-    x: w/2 + Math.cos(random(360))*radius,
-    y: h/2 + Math.sin(random(360))*radius,
-    speed_x: random(1),
-    speed_y: random(1),
-    size: 10,
-    colour: rgb(0),
-    angle: random(radians(360))
-  }
-  balls.push(ball);
-}
+// pass in the object
+function addParticle(_i, _object){
 
-function draw(){
+  var _angle = radians(distributeAngles(i, _object.count));
 
-  ctx.background(255, 0.8);
-  moveBall();
-  drawBall();
-}
-
-
-function moveBall(){
-
-  for (var i = 0; i < balls.length; i++) {
-    var b = balls[i];
-    b.angle += radians(b.speed_x);
-    b.x = w/2 + Math.cos(b.angle)*radius;
-    b.y = h/2 + Math.sin(b.angle)*radius;
-
-    // if (bounce(b.x, 0, w, b.size)) {
-    //   b.speed_x *=-1;
-    // }
-    //
-    // if (bounce(b.y, 0 ,h, b.size)) {
-    //   b.speed_y *=-1;
-    // }
-
+  var particle = {
+    x: 0,
+    y: 0,
+    speed: _object.speed,
+    angle: _angle,
+    radius: _object.radius
   }
 
+  _object.particles.push(particle);
+
+}
+
+function draw() {
+
+  ctx.background(0);
+  ctx.strokeStyle = "white";
+  ctx.lineWidth = 4;
+  drawLines();
+
 }
 
 
-function drawBall(){
-  for (var i = 0; i < balls.length; i++) {
-    var b = balls[i];
-    drawConnections(i);
-    ctx.fillStyle = b.colour;
-    //ctx.fillEllipse(b.x, b.y, b.size);
-  }
-}
+function drawLines(){
 
-function drawConnections(i){
-  ctx.lineColour(0, 0.1);
-  for (var j = 0; j < balls.length; j++) {
-    if (i!=j){
-      b1 = balls[i];
-      b2 = balls[j];
-      ctx.line(b1.x, b1.y, b2.x, b2.y);
+  for (var i=0; i< outers.count; i++) {
+
+    var outer = outers.particles[i];
+    outer.angle += outer.speed;
+    outer.x = w/2 + Math.cos(outer.angle) * outer.radius;
+    outer.y = h/2 + Math.sin(outer.angle) * outer.radius;
+
+    for (var j=0; j< inners.count; j++) {
+      var inner = inners.particles[j];
+      inner.angle += inner.speed;
+      inner.x = w/2 + Math.cos(inner.angle) * inner.radius;
+      inner.y = h/2 + Math.sin(inner.angle) * inner.radius;
+      ctx.line(inner.x, inner.y, outer.x, outer.y);
     }
 
+
   }
 
 }
+
+
 
 </script>
 

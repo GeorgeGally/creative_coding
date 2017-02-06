@@ -17,7 +17,7 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var number_of_balls = 10;
+var number_of_balls = 8;
 var balls = [];
 var radius = 200;
 ctx.lineWidth = 1;
@@ -32,20 +32,19 @@ function addBall(_i){
   var ball = {
     x: 0,
     y: 0,
-    speed: random(-1,1),
-    size: random(10, 20),
+    speed: posNeg() * random(0.2, 1),
+    size: random(20, 80),
     colour: rgb(0),
-    radius: 50+ _i*30,
-    angle: random(360)
+    radius: random(150, 350),
+    direction: posNeg(),
+    angle: i * 360/number_of_balls
   }
   balls.push(ball);
 }
 
 function draw(){
 
-  ctx.background(255, 0.2);
-  ctx.fillStyle = rgb(0);
-  ctx.fillEllipse(w/2, h/2, 50);
+  ctx.background(255);
 
   moveBall();
   drawBall();
@@ -57,10 +56,9 @@ function moveBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     b.angle += b.speed;
-    b.rotation += 2;
-    b.x = w/2 + Math.cos(radians(b.angle))*b.radius;
-    b.y = h/2 + Math.sin(radians(b.angle))*b.radius;
-
+    b.x = w/2 + Math.cos(radians(b.angle)) * b.radius;
+    b.y = h/2 + Math.sin(radians(b.angle)) * b.radius;
+    hitTest(i);
   }
 
 }
@@ -69,13 +67,38 @@ function moveBall(){
 function drawBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
-    ctx.strokeEllipse(w/2, h/2, 100 + b.radius);
+    drawConnections(i);
     ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.size);
+    //ctx.fillEllipse(b.x, b.y, b.size);
   }
 }
 
 
+function hitTest(_i){
+  for (var j = 0; j < balls.length; j++) {
+    if (_i!=j){
+      b1 = balls[_i];
+      b2 = balls[j];
+      if (dist(b1.x, b1.y, b2.x, b2.y) <= b1.size/2 + b2.size/2) {
+        b1.speed *=-1;
+        b2.speed *=-1;
+      }
+    }
+  }
+}
+
+function drawConnections(i){
+  ctx.lineStyle = rgb(0);
+  for (var j = 0; j < balls.length; j++) {
+    if (i!=j){
+      b1 = balls[i];
+      b2 = balls[j];
+      ctx.line(b1.x, b1.y, b2.x, b2.y);
+    }
+
+  }
+
+}
 
 </script>
 
