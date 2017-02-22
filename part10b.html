@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+  <meta charset="utf-8">
+  <script language="javascript" src="js/creative_coding.js"></script>
+  <script language="javascript" src="js/canvas.js"></script>
+
+  <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var number_of_balls = 5;
+var balls = [];
+var radius = 200;
+var fov = 540;
+var horizon_x = width / 2 //or wherever you've placed it
+var horizon_y = height / 2 //again, wherever else is fine
+
+
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(i);
+}
+
+
+function addBall(_i){
+  var ball = {
+    x: 0,
+    y: 0,
+    z: 0,
+    x2d: 0,
+    y2d: 0,
+    speed: 0.4,
+    scale: 1,
+    size: 20,
+    colour: rgb(0),
+    angle_x: 0,
+    angle_y: 0,
+    angle: distributeAngles(_i, number_of_balls)
+  }
+  balls.push(ball);
+}
+
+function draw(){
+  ctx.background(245, 1);
+  horizon_y = h/2-mouseY;
+  ctx.save();
+  // ctx.fillStyle = "red";
+  // ctx.HfillEllipse(w/2, h/2, radius*2);
+  ctx.translate(w/2, h/2);
+  //ctx.rotate(mouseX)
+
+  moveBall();
+  drawBall();
+  ctx.restore();
+}
+
+
+function moveBall(){
+
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    // move the angle to rotate the balls
+    b.angle += b.speed;
+    // b.angle_x = b.angle + (mouseX/width-0.5)/1;
+    // b.angle_y = b.angle + ((mouseY/height)-0.5)/1;
+    //if(i==0) console.log(b.angle_x);
+    b.x = Math.cos(radians(b.angle))*(radius+b.size/2);
+    //b.y = Math.sin(radians(b.angle))*(radius+b.size/2);
+    b.z = Math.sin(radians(b.angle))*(radius+b.size/2);
+    b.scale = fov/(b.z+fov);
+    var scaleinverse = 1.0 - b.scale //the inverse of your scale_factor
+    b.x2d = (b.x * b.scale) + (horizon_x * scaleinverse);
+    b.y2d = (b.y * b.scale) + (horizon_y * scaleinverse);
+  }
+
+}
+
+
+
+function drawBall(){
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    ctx.fillStyle = b.colour;
+    ctx.fillEllipse(b.x2d, b.y2d, b.size*b.scale);
+  }
+}
+
+
+function distributeAngles(me, total) {
+    return me/total * 360;
+}
+
+
+
+</script>
+
+</body>
+
+</html>

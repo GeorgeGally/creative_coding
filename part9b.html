@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+  <meta charset="utf-8">
+  <script language="javascript" src="js/creative_coding.js"></script>
+  <script language="javascript" src="js/canvas.js"></script>
+
+  <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var particles = [];
+var FOV = 250;
+
+function addParticle(){
+  var particle = {
+    x: random(-100,100),
+    y: random(-100,100),
+    z: 10,
+    x3d: 0,
+    y3d: 0,
+    speed_z: 2,
+    scale: 1,
+    colour: rgb(0),
+  }
+  particles.push(particle);
+}
+
+function draw(){
+  ctx.background(245);
+  addParticle();
+  moveParticles();
+  drawParticles();
+}
+
+
+function moveParticles(){
+
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    p.z -= p.speed_z;
+    p.scale = FOV/(p.z+FOV);
+    p.x3d = p.x * p.scale;
+    p.y3d = p.y * p.scale;
+
+    if (p.z < -FOV) {
+      particles.splice(i,1);
+    }
+  }
+
+}
+
+
+function drawParticles(){
+  ctx.save();
+  ctx.translate(w/2, h/2);
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    ctx.fillStyle = rgb(0);
+    ctx.fillEllipse(p.x3d, p.y3d, p.scale, p.scale);
+  }
+  ctx.restore();
+}
+
+
+
+</script>
+
+</body>
+
+</html>
