@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+  <meta charset="utf-8">
+  <script language="javascript" src="js/creative_coding.js"></script>
+  <script language="javascript" src="js/canvas.js"></script>
+
+  <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var number_of_balls = 50;
+var balls = [];
+var radius = 200;
+var fov = 240;
+var horizon_x = width / 2 //or wherever you've placed it
+var horizon_y = height / 2 //again, wherever else is fine
+
+
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(i);
+}
+
+
+function addBall(_i){
+  var ball = {
+    x: 0,
+    y: 0,
+    z: 0,
+    x2d: 0,
+    y2d: 0,
+    speed_x: posNeg() * random(1,2)/100,
+    speed_y: posNeg() * random(1,2)/100,
+    speed_z: posNeg() * random(1,2)/100,
+    scale: 1,
+    size: 10,
+    colour: rgb(0),
+    angle: distributeAngles(_i, number_of_balls)
+  }
+  ball.x = Math.cos(radians(ball.angle))*(radius+ball.size/2);
+  ball.y = Math.sin(radians(ball.angle))*(radius+ball.size/2);
+  ball.z = Math.sin(radians(ball.angle))*(radius+ball.size/2);
+
+  balls.push(ball);
+}
+
+function draw(){
+  ctx.background(245);
+  horizon_y = h/2-mouseY;
+  ctx.save();
+
+  moveBall();
+  drawBall();
+  ctx.restore();
+}
+
+
+function moveBall(){
+
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    // move the angle to rotate the balls
+    //b.angle += b.speed;
+    rotateX(b, b.speed_x);
+    rotateY(b, b.speed_y);
+    rotateZ(b, b.speed_z);
+
+    b.size = map(b.z, -fov, fov, 1, 20);
+    b.x2d = projection(b.x, b.z, width/2, h/2, fov);
+    b.y2d = projection(b.y, b.z, height/2, h/2, fov);
+
+  }
+
+}
+
+
+
+function drawBall(){
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    console.log(b.scale);
+    if (b.size < 10) {
+      ctx.fillStyle = rgb(200);
+    } else {
+      ctx.fillStyle = b.colour;
+    }
+    ctx.fillStyle = rgb(200 - b.size * 10);
+    ctx.fillEllipse(b.x2d, b.y2d, b.size);
+  }
+}
+
+
+function distributeAngles(me, total) {
+    return me/total * 360;
+}
+
+
+function rotateX(b, radians) {
+  //console.log(b.x);
+   var y = b.y;
+   b.y = (y * Math.cos(radians)) + (b.z * Math.sin(radians) * -1.0);
+   //console.log(p.y);
+   b.z = (y * Math.sin(radians)) + (b.z * Math.cos(radians));
+}
+
+function rotateY(p, radians) {
+   var x = p.x;
+   p.x = (x * Math.cos(radians)) + (p.z * Math.sin(radians) * -1.0);
+   p.z = (x * Math.sin(radians)) + (p.z * Math.cos(radians));
+}
+
+function rotateZ(p, radians) {
+   var x = p.x;
+   p.x = (x * Math.cos(radians)) + (p.y * Math.sin(radians) * -1.0);
+   p.y = (x * Math.sin(radians)) + (p.y * Math.cos(radians));
+}
+
+function projection(xy, z, xyOffset, zOffset, distance) {
+   return ((distance * xy) / (z - zOffset)) + xyOffset;
+}
+
+
+
+</script>
+
+</body>
+
+</html>

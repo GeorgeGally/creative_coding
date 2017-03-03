@@ -99,6 +99,7 @@ p.Hellipse = function(x, y, width, height) {
  this.closePath();
 };
 
+
 p.fillEllipse = function(x, y, width, height) {
  'use strict';
  if (height == undefined) height = width;
@@ -318,11 +319,14 @@ function rgb(r, g, b) {
 };
 
 function rgba(r, g, b, a) {
- if (b == undefined) {
-  return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+', '+clamp(g,0,1)+')';
+  if (g == undefined) {
+   return 'rgb('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+')';
+ } else if (b == undefined) {
+    return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+', '+clamp(Math.round(r),0,255)+', '+clamp(g,0,1)+')';
+  } else if (a == undefined){
+  return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(g),0,255)+', '+clamp(Math.round(b),0,255)+', 1)';
 } else {
-  if (a == undefined) a = 1;
-  return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(g),0,255)+', '+clamp(Math.round(b),0,255)+', '+clamp(a,0,1)+')';
+return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(g),0,255)+', '+clamp(Math.round(b),0,255)+', '+clamp(a,0,1)+')';
  }
 };
 
@@ -610,29 +614,66 @@ function makeGrid(_w, _h){
  return grid;
 }
 
-function createGrid(_gw, _gh, _w, _h){
+function Grid(_num_items_horiz, _num_items_vert, _grid_w, _grid_h, _startx, _starty){
 
-  if (_w === undefined) _w = w;
-  if (_h === undefined) _h = h;
+  if (_num_items_horiz == undefined) _num_items_horiz = 1;
+  if (_num_items_vert == undefined) _num_items_vert = 1;
+  var _horiz = _num_items_horiz || 1;
+  var _vert = _num_items_vert || 1;
 
-  var spacing_x = _w/_gw;
-  var spacing_y = _h/_gh;
-  var grid = [];
-  var k = 0;
+  this.spacing_x;
+  this.spacing_y;
 
-  for (var y = 0; y < _gh; y++) {
+  this.num_items_horiz = 0;
+  this.num_items_vert = 0;
 
-    for (var x = 0; x < _gw; x++) {
+  this.start = {x: _startx || 0 , y: _starty || 0};
 
-      grid[k] = {
-        0: x*spacing_x+ spacing_x/2, 1: y*spacing_y+ spacing_y/2,
-        x: x*spacing_x+ spacing_x/2, y: y*spacing_y+ spacing_y/2
-      };
-      k++;
-    }
-  };
+  this.grid_w = _grid_w || w;
+  this.grid_h = _grid_h || h;
 
-  return grid;
+  this.x = [];
+  this.y = [];
+
+  this.add = function(_horiz, _vert) {
+
+    this.num_items_horiz += _horiz || 1;
+    this.num_items_vert += _vert || 1;
+
+    this.spacing_x = this.grid_w / this.num_items_horiz;
+    this.spacing_y = this.grid_h / this.num_items_vert;
+
+    this.createGrid();
+
+    return this;
+
+  }
+
+
+  this.setStart = function(_x, _y) {
+
+     this.start = {x: _x || 0 , y: _y || 0};
+     createGrid();
+
+  }
+
+  this.createGrid = function() {
+
+    for (var _y = 0; _y < this.grid_h; _y+=this.spacing_y) {
+
+      for (var _x = 0; _x < this.grid_w; _x+=this.spacing_x) {
+
+        this.x.push(this.start.x + this.spacing_x/2 + _x);
+        this.y.push(this.start.y + this.spacing_y/2 + _y);
+
+      }
+    };
+
+  }
+
+  this.add(_horiz, _vert);
+
+  return this;
 
 }
 

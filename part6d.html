@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+    <meta charset="utf-8">
+    <script language="javascript" src="../js/creative_coding.js"></script>
+    <script language="javascript" src="../js/canvas.js"></script>
+
+<link rel="stylesheet" href="../css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../css/style.css" type="text/css" media="screen" />
+
+</head>
+<body style="background: #fff">
+
+<script>
+// Moving Balls with Lissajous Curves
+var ctx2 = createCanvas("canvas2");
+var ctx = createCanvas("canvas1");
+var number_of_balls = 150;
+var balls = [];
+var max_distance = 150;
+
+// push a ball and it's values into the array
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(i);
+}
+
+
+function addBall(_i){
+  var ball = {
+    x: random(400),
+    y: random(300),
+    speed_x: posNeg() * random(0.002, 0.01)/20,
+    speed_y: posNeg() * random(0.002, 0.01)/20,
+    anglex: random(360),
+    angley: random(360),
+    radiusx: w,
+    radiusy: h,
+    size: 10,
+    colour: rgb(200,0,0),
+  }
+  balls.push(ball);
+}
+
+function draw(){
+
+  //ctx.background(0);
+  ctx.clearRect(0,0,w,h);
+  moveBall();
+  drawBall();
+}
+
+
+function moveBall(){
+
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    b.anglex += b.speed_x;
+    b.angley += b.speed_y;
+    b.x = Math.cos(b.anglex) * b.radiusx;
+    b.y = Math.sin(b.angley) * b.radiusy;
+
+  }
+
+}
+
+
+function drawBall(){
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    drawConnections(i);
+    ctx.fillStyle = b.colour;
+    ctx.fillEllipse(b.x, b.y, b.size);
+    ctx2.fillStyle = rgba(0, 0.5);
+    ctx2.fillRect(b.x, b.y, 0.5, 0.5);
+
+  }
+}
+
+
+
+function drawConnections(_i) {
+
+  for (var j = 0; j < balls.length; j++) {
+
+    b1 = balls[_i];
+    b2 = balls[j];
+    var distance = dist(b1.x, b1.y, b2.x, b2.y);
+    if (j!=i) {
+      if ( distance <= max_distance) {
+          ctx.strokeStyle = b1.colour;
+          // ctx.lineWidth = 1 - distance/max_distance;
+          ctx.lineWidth = 0.5;
+          ctx.line(b1.x, b1.y, b2.x, b2.y);
+          ctx2.lineWidth = 0.2;
+          ctx2.strokeStyle = rgba(0, 0.05);
+          ctx2.line(b1.x, b1.y, b2.x, b2.y);
+      }
+    }
+  }
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+  <meta charset="utf-8">
+  <script language="javascript" src="js/creative_coding.js"></script>
+  <script language="javascript" src="js/canvas.js"></script>
+
+  <script src='http://connect.soundcloud.com/sdk.js'></script>
+  <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var number_of_balls = 10;
+var balls = [];
+var radius = 150;
+var fov = 240;
+var grd=ctx.createRadialGradient(w/2-100,h/2-100, 20, w/2,w/2,h/2, 30);
+grd.addColorStop(0,"red");
+grd.addColorStop(1,"white");
+
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(i);
+}
+
+
+function addBall(_i){
+  var ball = {
+    x: 0,
+    y: 0,
+    z: 0,
+    x2d: 0,
+    y2d: 0,
+    speed: posNeg() * random(1,2)/300,
+    scale: 1,
+    size: 10,
+    colour: rgb(0),
+    angle: distributeAngles(_i, number_of_balls)
+  }
+  ball.x = Math.cos(radians(ball.angle))*(radius+ball.size/2);
+  ball.y = Math.sin(radians(ball.angle))*(radius+ball.size/2);
+  ball.z = Math.sin(radians(ball.angle))*(radius+ball.size/2);
+
+  balls.push(ball);
+}
+
+function draw(){
+  ctx.background(245);
+  ctx.fillStyle = grd;
+  ctx.HfillEllipse(w/2, h/2, radius*2);
+  ctx.save();
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    moveBall(b);
+    drawBall(b);
+  }
+  ctx.restore();
+}
+
+
+function moveBall(b){
+
+    rotateX(b, b.speed);
+    //rotateY(b, b.speed_x);
+    //rotateZ(b, b.speed_x);
+
+    b.size = map(b.z, -fov, fov, 1, 20);
+    b.x2d = projection(b.x, b.z, width/2, h/2, fov);
+    b.y2d = projection(b.y, b.z, height/2, h/2, fov);
+
+}
+
+
+
+function drawBall(b){
+
+    //console.log(b.z);
+    if (b.z > 1  && dist(b.x2d, b.y2d, w/2, h/2) < 180) {
+      ctx.fillStyle = rgb(200 - b.size * 10);
+      ctx.fillEllipse(b.x2d, b.y2d, b.size);
+    }
+
+}
+
+
+function distributeAngles(me, total) {
+    return me/total * 360;
+}
+
+
+function rotateX(b, radians) {
+  //console.log(b.x);
+   var y = b.y;
+   b.y = (y * Math.cos(radians)) + (b.z * Math.sin(radians) * -1.0);
+   //console.log(p.y);
+   b.z = (y * Math.sin(radians)) + (b.z * Math.cos(radians));
+}
+
+function rotateY(p, radians) {
+   var x = p.x;
+   p.x = (x * Math.cos(radians)) + (p.z * Math.sin(radians) * -1.0);
+   p.z = (x * Math.sin(radians)) + (p.z * Math.cos(radians));
+}
+
+function rotateZ(p, radians) {
+   var x = p.x;
+   p.x = (x * Math.cos(radians)) + (p.y * Math.sin(radians) * -1.0);
+   p.y = (x * Math.sin(radians)) + (p.y * Math.cos(radians));
+}
+
+function projection(xy, z, xyOffset, zOffset, distance) {
+   return ((distance * xy) / (z - zOffset)) + xyOffset;
+}
+
+
+</script>
+
+<script language="javascript" src="js/soundcloud.js"></script>
+
+</body>
+
+</html>

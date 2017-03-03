@@ -2,10 +2,10 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-    <meta charset="utf-8">
-
+<meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
+<!-- <script language="javascript" src="js/mircophone.js"></script> -->
 
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
@@ -17,27 +17,43 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var number_of_balls = 10;
+
+
+// create grid
+var num_grid_horiz = 10;
+var num_grid_vert = 10;
+var grid_w = 400;
+var grid_h = 400;
+var grid_startx = w/2 - grid_w/2;
+var grid_starty = h/2 - grid_h/2;
+
+var grid = new Grid(num_grid_horiz, num_grid_vert, grid_w, grid_h, grid_startx, grid_starty);
+
+console.log(grid);
+
+// create particles
 var balls = [];
-
-
-// push a ball and it's values into the array
+var number_of_balls = num_grid_horiz * num_grid_vert;
 for (var i = 0; i < number_of_balls; i++) {
+  addBall(grid.x[i], grid.y[i]);
+}
+
+function addBall(_x, _y){
   var ball = {
-    x:  width/2,
-    y: height/2,
-    speed_x: random(-5, 5),
-    speed_y: random(-5, 5),
+    x: _x,
+    y: _y,
+    speed_x: random(1),
+    speed_y: random(1),
     size: 20,
-    colour: rgb(0)
+    colour: rgb(0),
   }
   balls.push(ball);
 }
 
 
-function draw(){
 
-  //ctx.background(255, 0.2);
+function draw(){
+  ctx.background(235, 0.5);
   moveBall();
   drawBall();
 }
@@ -47,19 +63,7 @@ function moveBall(){
 
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
-    b.x = b.x + b.speed_x;
-    b.y = b.y + b.speed_y;
-
-    if (bounce(b.x, 0, w, b.size)) {
-      b.speed_x *=-1;
-      b.colour = rgb(randomInt(55),randomInt(255),0);
-    }
-
-    if (bounce(b.y, 0 ,h, b.size)) {
-      b.speed_y *=-1;
-      b.colour = rgb(0, randomInt(255),randomInt(55));
-    }
-
+    b.size = random(2, 30);
   }
 
 }
@@ -69,9 +73,10 @@ function drawBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.size, b.size);
+    ctx.fillEllipse(b.x, b.y, b.size);
   }
 }
+
 
 
 </script>

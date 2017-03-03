@@ -2,10 +2,10 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
-    <meta charset="utf-8">
-
+<meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
+<!-- <script language="javascript" src="js/mircophone.js"></script> -->
 
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
@@ -17,27 +17,35 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var number_of_balls = 10;
+
 var balls = [];
 
+var grid_w = 10;
+var grid_h = 1;
+var number_of_balls = grid_w * grid_h;
+
+var grid = new Grid(grid_w, grid_h,200,100, w/2);
+
+console.log(grid);
 
 // push a ball and it's values into the array
 for (var i = 0; i < number_of_balls; i++) {
+  addBall(grid.x[i], grid.y[i]);
+}
+
+
+function addBall(_x, _y){
   var ball = {
-    x:  width/2,
-    y: height/2,
-    speed_x: random(-5, 5),
-    speed_y: random(-5, 5),
-    size: 20,
-    colour: rgb(0)
+    x: _x,
+    y: _y,
+    size: random(10, 50),
+    colour: rgb(0),
   }
   balls.push(ball);
 }
 
-
 function draw(){
-
-  //ctx.background(255, 0.2);
+  ctx.background(255, 0.1);
   moveBall();
   drawBall();
 }
@@ -47,19 +55,10 @@ function moveBall(){
 
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
-    b.x = b.x + b.speed_x;
-    b.y = b.y + b.speed_y;
-
-    if (bounce(b.x, 0, w, b.size)) {
-      b.speed_x *=-1;
-      b.colour = rgb(randomInt(55),randomInt(255),0);
-    }
-
-    if (bounce(b.y, 0 ,h, b.size)) {
-      b.speed_y *=-1;
-      b.colour = rgb(0, randomInt(255),randomInt(55));
-    }
-
+    b.angle += b.speed_x;
+    b.rotation += 2;
+    b.y = h/2 + Math.cos(radians(b.angle))*h/2;
+    // if(Microphone.input.length > 0) b.size = tween(b.size , mapSound(Microphone.input, i, balls.length), 5);
   }
 
 }
@@ -69,9 +68,10 @@ function drawBall(){
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.size, b.size);
+    ctx.fillEllipse(b.x, b.y, b.size);
   }
 }
+
 
 
 </script>
