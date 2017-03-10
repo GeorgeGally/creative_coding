@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/video.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var video = new Video();
+
+// create grid
+var num_grid_horiz = 1;
+var num_grid_vert = 34;
+
+var grid = new Grid(num_grid_horiz, num_grid_vert);
+
+console.log(grid);
+
+// create particles
+var balls = [];
+var number_of_balls = num_grid_horiz * num_grid_vert;
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(grid.x[i], grid.y[i]);
+}
+
+function addBall(_x, _y){
+  var ball = {
+    x: _x,
+    y: _y,
+    startx: _x,
+    starty: _y,
+    speed_x: 1,
+    speed_y: random(1),
+    size: 20,
+    colour: rgb(0),
+    angle: random(360)
+  }
+  balls.push(ball);
+}
+
+
+
+function draw(){
+  ctx.background(235, 0.1);
+  moveBall();
+  drawBall();
+}
+
+
+function moveBall(){
+
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    b.angle += b.speed_x/100;
+    b.x = Math.cos(b.angle) * w;
+    //b.y = b.starty + Math.sin(b.angle) * 20;
+
+  }
+
+}
+
+
+function drawBall(){
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    ctx.fillStyle = b.colour;
+    ctx.fillRect(0, b.y, w, b.size);
+    ctx.fillStyle = "white";
+    ctx.fillRect(b.x, b.y, b.size, b.size);
+  }
+}
+
+
+
+</script>
+
+</body>
+
+</html>

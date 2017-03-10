@@ -1,3 +1,4 @@
+var Sound;
 
 var soundCloud = function(fft_size) {
 
@@ -394,11 +395,25 @@ var soundCloud = function(fft_size) {
 } // END SOUNDCLOUD
 
 
+// loadscript utility
 
+function loadScript(url, callback)
+{
+    // Adding the script tag to the head as suggested before
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
 
-// calculate RMS - a good approximation of "loudness"
+    // Then bind the event to the callback function.
+    // There are several events for cross browser compatibility.
+    script.onreadystatechange = callback;
+    script.onload = callback;
 
+    // Fire the loading
+    head.appendChild(script);
+}
 
-
-
-var sound = new soundCloud();
+function init(){
+  Sound = new soundCloud();
+}
