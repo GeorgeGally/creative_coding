@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-
+<script language="javascript" src="js/mic.js"></script>
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 
@@ -16,34 +16,23 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-
-
-var colours = new colourPool()
-	    .add("#FFFFFF", 0.9)
-	    .add("#DDDDDD", 0.9)
-	    .add("#0095A8", 0.6)
-	    .add("#00616F", 0.6)
-	    .add("#333333", 0.6)
-	    .add("#FF3300")
-	    .add("#FF6600");
-
-
+ctx.lineWidth = 0.2;
 
 // create particles
 var balls = [];
-var number_of_balls = 100;
+var number_of_balls = 60;
 for (var i = 0; i < number_of_balls; i++) {
-  addBall(w/2, random(h));
+  addBall(i);
 }
 
-function addBall(_x, _y){
+function addBall(i){
+  var angle = radians(distributeAngles(i, number_of_balls));
   var ball = {
-    x: _x,
-    y: _y,
-    speed_x: random(-5,5),
-    speed_y: random(-5,5),
+    angle: angle,
+    x: w/2 + Math.cos(angle) * 200,
+    y: h/2 + Math.sin(angle) * 200,
     sz: random(10,80),
-    colour: colours.get()
+    me: i
   }
   balls.push(ball);
 }
@@ -61,11 +50,15 @@ function draw(){
 
 function moveBall(b){
 
-    b.x += b.speed_x;
-    b.y += b.speed_y;
+    var s = Mic.mapSound(b.me, balls.length);
+    console.log(s);
+    b.sz = tween(b.sz, 50 + s, 4);
+    //console.log(b.sz);
+    b.x = w/2 + Math.cos(b.angle) * (160 + s/4);
+    b.y = h/2 + Math.sin(b.angle) * (160 + s/4);
 
     if(b.x > w - b.sz/2 || b.x < b.sz/2){
-      b.speed_x *= -0.9;
+      b.speed_x *= -1;
     }
     if(b.y > h - b.sz/2 || b.y < b.sz/2) {
       b.speed_y *= -1;
@@ -75,10 +68,16 @@ function moveBall(b){
 
 
 function drawBall(b){
-    ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.sz, b.sz);
+    ctx.strokeStyle = "black";
+    ctx.strokeEllipse(b.x, b.y, b.sz, b.sz);
+    ctx.fillStyle = "black";
+    ctx.fillEllipse(b.x, b.y, 4, 4);
 }
 
+
+function distributeAngles(me, total) {
+    return me/total * 360;
+}
 
 
 </script>

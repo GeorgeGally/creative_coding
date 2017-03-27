@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-
+<script language="javascript" src="js/mic.js"></script>
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
 
@@ -16,38 +16,28 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-
-
-var colours = new colourPool()
-	    .add("#FFFFFF", 0.9)
-	    .add("#DDDDDD", 0.9)
-	    .add("#0095A8", 0.6)
-	    .add("#00616F", 0.6)
-	    .add("#333333", 0.6)
-	    .add("#FF3300")
-	    .add("#FF6600");
-
-
+var gw = 30;
+var gh = 30;
+var grid = new Grid(gw, gh);
+ctx.lineWidth = 0.2;
+console.log(grid);
 
 // create particles
 var balls = [];
-var number_of_balls = 100;
+var number_of_balls = gw * gh;
 for (var i = 0; i < number_of_balls; i++) {
-  addBall(w/2, random(h));
+  addBall(grid.x[i], grid.y[i], i);
 }
 
-function addBall(_x, _y){
+function addBall(x, y, i){
   var ball = {
-    x: _x,
-    y: _y,
-    speed_x: random(-5,5),
-    speed_y: random(-5,5),
-    sz: random(10,80),
-    colour: colours.get()
+    x: x,
+    y: y,
+    sz: 10,
+    me: i
   }
   balls.push(ball);
 }
-
 
 function draw(){
   ctx.background(235);
@@ -60,25 +50,21 @@ function draw(){
 
 
 function moveBall(b){
-
-    b.x += b.speed_x;
-    b.y += b.speed_y;
-
-    if(b.x > w - b.sz/2 || b.x < b.sz/2){
-      b.speed_x *= -0.9;
+    var m = Math.round(mic.vols.length/2);
+    if(m > 0) {
+      var s = map(mic.vols[b.me%(m-1)], 0, 255, 4, grid.spacing_x - 2);
+      b.sz = tween(b.sz, s, 2);
     }
-    if(b.y > h - b.sz/2 || b.y < b.sz/2) {
-      b.speed_y *= -1;
-    }
-
+    b.y +=2;
+    if( b.y > h) b.y = 0;
 }
 
 
 function drawBall(b){
-    ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.sz, b.sz);
-}
+    ctx.fillStyle = "black";
+    ctx.fillRect(b.x, b.y, b.sz, grid.spacing_y - 2);
 
+}
 
 
 </script>

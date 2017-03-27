@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var ctx2 = createCanvas("canvas2");
+
+var colours = new colourPool()
+	.add("#FBA83F", 0.9)
+	.add("#E84004", 0.9)
+	.add("#CCD9AC", 0.9)
+	.add("#BFFFCB", 0.6)
+	.add("#D8DEC5", 0.6)
+	.add("#FBA83F", 0.6)
+	.add("#E84004")
+	.add("#CCD9AC");
+
+// create particles
+var balls = [];
+var number_of_balls = 26;
+var max_trails = 30;
+
+ctx2.lineWidth = 0.1;
+
+for (var i = 0; i < number_of_balls; i++) {
+  addBall(w/2, random(h));
+}
+
+function addBall(_x, _y){
+  var ball = {
+    x: _x,
+    y: _y,
+    speed_x: random(-8,8),
+    speed_y: random(-8,8),
+    sz: random(60,120),
+		counter: random(360),
+		s: 0,
+		r: 0,
+		trails: [],
+    colour: colours.get()
+  }
+  balls.push(ball);
+
+}
+
+
+function draw(){
+	ctx.background(255);
+  ctx2.clearRect(0, 0, w, h);
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    moveBall(b);
+
+		for (var j = 0; j < b.trails.length; j++) {
+			drawBall(b.trails[j]);
+		}
+    drawBall(b);
+
+
+  }
+}
+
+
+function moveBall(b){
+
+    b.x += b.speed_x;
+    b.y += b.speed_y;
+		b.r += b.speed_x/2;
+    if(b.x > w - b.sz/2 || b.x < b.sz/2){
+      b.speed_x *= -1;
+    }
+    if(b.y > h - b.sz/2 || b.y < b.sz/2) {
+      b.speed_y *= -1;
+    }
+
+
+		b.trails.push({x:b.x, y:b.y, r:b.r, sz:b.sz, counter: b.counter});
+		if (b.trails.length > max_trails) b.trails.splice(0,1);
+}
+
+
+function drawBall(b){
+    ctx.save();
+    ctx2.save();
+    ctx.translate(b.x, b.y);
+    ctx2.translate(b.x, b.y);
+		ctx.rotateDeg(b.r);
+		ctx2.rotateDeg(b.r);
+		b.s = 10 + Math.abs(Math.sin((b.counter + frameCount)/100) * b.sz);
+		// ctx.strokeStyle = "black";
+		// ctx.fillStyle = colours.get();
+    // ctx.roundRect(0, 0, b.s, b.s, 8);
+		ctx2.strokeStyle = "black";
+		ctx2.fillStyle = b.colour;
+    ctx2.roundRect(0, 0, b.s, b.s, 8);
+    ctx.restore();
+		ctx2.restore();
+}
+
+
+
+</script>
+
+</body>
+
+</html>

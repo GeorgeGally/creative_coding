@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/mic.js"></script>
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+ctx.background(235);
+
+function draw(){
+
+  var s = Mic.getVolume();
+  //console.log(s);
+  // ctx.fillStyle = hsl(s, 30, 50);
+  ctx.fillStyle = rgb(s*2);
+  ctx.HfillEllipse(w/2, h/2, s*5, s*5);
+}
+
+
+
+</script>
+
+</body>
+
+</html>

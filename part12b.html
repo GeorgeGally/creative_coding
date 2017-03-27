@@ -16,22 +16,24 @@
 <script>
 
 var ctx = createCanvas("canvas1");
+var ctx2 = createCanvas("canvas2");
 
 
 var colours = new colourPool()
-	    .add("#FFFFFF", 0.9)
-	    .add("#DDDDDD", 0.9)
-	    .add("#0095A8", 0.6)
-	    .add("#00616F", 0.6)
+	    .add("#FFFFFF", 0.7)
+	    .add("#F7F7F7", 0.9)
+	    .add("#ECECEC", 0.7)
+	    .add("#0095A8", 0.8)
+	    .add("#00616F", 0.5)
 	    .add("#333333", 0.6)
-	    .add("#FF3300")
-	    .add("#FF6600");
+	    .add("#FF3300", 0.4)
+	    .add("#FF6600", 0.6);
 
 
 
 // create particles
 var balls = [];
-var number_of_balls = 100;
+var number_of_balls = 20;
 for (var i = 0; i < number_of_balls; i++) {
   addBall(w/2, random(h));
 }
@@ -42,7 +44,8 @@ function addBall(_x, _y){
     y: _y,
     speed_x: random(-5,5),
     speed_y: random(-5,5),
-    sz: random(10,80),
+    sz: random(40,80),
+		r: 0,
     colour: colours.get()
   }
   balls.push(ball);
@@ -50,11 +53,17 @@ function addBall(_x, _y){
 
 
 function draw(){
-  ctx.background(235);
+  ctx2.clearRect(0, 0, w, h);
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     moveBall(b);
+		ctx.save();
+		ctx2.save();
+		ctx.translate(b.x, b.y);
+		ctx2.translate(b.x, b.y);
     drawBall(b);
+		ctx.restore();
+		ctx2.restore();
   }
 }
 
@@ -63,20 +72,25 @@ function moveBall(b){
 
     b.x += b.speed_x;
     b.y += b.speed_y;
-
+		b.r += b.speed_x/3;
     if(b.x > w - b.sz/2 || b.x < b.sz/2){
-      b.speed_x *= -0.9;
+      b.speed_x *= -1;
     }
     if(b.y > h - b.sz/2 || b.y < b.sz/2) {
       b.speed_y *= -1;
     }
-
 }
 
 
 function drawBall(b){
-    ctx.fillStyle = b.colour;
-    ctx.fillEllipse(b.x, b.y, b.sz, b.sz);
+		ctx.rotateDeg(b.r);
+		ctx2.rotateDeg(b.r);
+		ctx.fillStyle = colours.get();
+    ctx.fillPolygon(0, 0, 6, b.sz);
+		ctx2.fillStyle = b.colour;
+    ctx2.fillPolygon(0, 0, 6, b.sz);
+		// ctx2.strokeStyle = "black";
+		// ctx2.strokePolygon(0, 0, 6, b.sz);
 }
 
 

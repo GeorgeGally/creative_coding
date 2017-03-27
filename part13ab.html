@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/mic.js"></script>
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+
+// make a grid 200 wide
+var grid = new Grid(200, 1);
+
+function draw(){
+
+  ctx.background(235);
+
+  for (var i = 0; i < grid.length; i++) {
+    var s = Mic.spectrum[i];
+    ctx.fillStyle = hsl(map(i, 0, grid.length, 0, 360), 80, 50);
+    ctx.fillRect(grid.x[i], h - s, grid.spacing_x-1, s);
+  }
+
+}
+
+
+
+</script>
+
+</body>
+
+</html>

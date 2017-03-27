@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/mic.js"></script>
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+ctx.background(235);
+
+// make a grid 100 wide
+var grid = new Grid(200, 1);
+
+function draw(){
+
+  ctx.clearRect(0,0,w,h);
+
+  for (var i = 0; i < grid.length; i++) {
+    // Mic.mapSound(_me, _total, _min, _max)
+    var s = Mic.mapSound(i, grid.length, 0, h/4);
+    ctx.fillStyle = hsl(map(i, 0, grid.length, 0, 360), 80, 50);
+    ctx.fillRect(grid.x[i], h - s, grid.spacing_x-1, s);
+  }
+
+  var mix = Mic.getMix();
+  for (var i = 0; i < mix.bass.length; i++) {
+    var b = mix.bass[i];
+    ctx.fillEllipse(map(i, 0, mix.bass.length, 50, w- 50), h - h/4, b, b);
+  }
+
+  for (var i = 0; i < mix.mids.length; i++) {
+    var m = mix.mids[i];
+    ctx.fillEllipse(map(i, 0, mix.mids.length, 50, w- 50), h/2, m, m);
+  }
+
+  for (var i = 0; i < mix.highs.length; i++) {
+    var hs = mix.highs[i];
+    ctx.fillEllipse(map(i, 0, mix.highs.length, 50, w - 50), h/4, hs, hs);
+  }
+
+}
+
+
+
+</script>
+
+</body>
+
+</html>

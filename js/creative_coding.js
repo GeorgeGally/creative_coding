@@ -143,6 +143,38 @@ p.centreFillRect = function(x, y, width, height) {
  this.fillRect(x - width/2, y - height/2, width, height);
 };
 
+p.roundRect = function(_x, _y, _width, _height, _radius, _fill, _stroke) {
+  _fill   = _fill || true;
+  _stroke = _stroke || false;
+  _width  = Math.abs(_width);
+  _height = Math.abs(_height);
+  radius  = _radius || 5;
+  _x = _x - _width/2;
+  _y = _y - _height/2;
+  if (_width < radius) radius = _width;
+  radius  = {tl: radius, tr: radius, br: radius, bl: radius};
+
+  this.beginPath();
+  this.moveTo(_x + radius.tl, _y);
+  this.lineTo(_x + _width - radius.tr, _y);
+  this.quadraticCurveTo(_x + _width, _y, _x + _width, _y + radius.tr);
+  this.lineTo(_x + _width, _y + _height - radius.br);
+  this.quadraticCurveTo(_x + _width, _y + _height, _x + _width - radius.br, _y + _height);
+  this.lineTo(_x + radius.bl, _y + _height);
+  this.quadraticCurveTo(_x, _y + _height, _x, _y + _height - radius.bl);
+  this.lineTo(_x, _y + radius.tl);
+  this.quadraticCurveTo(_x, _y, _x + radius.tl, _y);
+  this.closePath();
+  if (_fill) {
+    this.fill();
+  }
+  if (_stroke) {
+    this.stroke();
+  }
+
+}
+
+
 p.line = function (x1, y1, x2, y2){
  this.beginPath();
  this.moveTo(x1,y1);
@@ -461,6 +493,13 @@ function randomInt(min, max) {
 }
 
 
+function randomColour(){
+  var r = randomInt(255);
+  var g = randomInt(255);
+  var b = randomInt(255);
+  return rgb(r,g,b);
+}
+
 function tween(pos, target, speed){
  if (speed == undefined) speed = 20;
  pos += (target - pos)/speed;
@@ -614,6 +653,7 @@ function makeGrid(_w, _h){
  return grid;
 }
 
+
 function Grid(_num_items_horiz, _num_items_vert, _grid_w, _grid_h, _startx, _starty){
 
   if (_num_items_horiz == undefined) _num_items_horiz = 1;
@@ -623,14 +663,14 @@ function Grid(_num_items_horiz, _num_items_vert, _grid_w, _grid_h, _startx, _sta
 
   this.spacing_x;
   this.spacing_y;
-
+  this.length = 0;
   this.num_items_horiz = 0;
   this.num_items_vert = 0;
 
   this.start = {x: _startx || 0 , y: _starty || 0};
 
-  this.grid_w = _grid_w || w;
-  this.grid_h = _grid_h || h;
+  this.grid_w = _grid_w || window.innerWidth;
+  this.grid_h = _grid_h || window.innerHeight;
 
   this.x = [];
   this.y = [];
@@ -659,16 +699,16 @@ function Grid(_num_items_horiz, _num_items_vert, _grid_w, _grid_h, _startx, _sta
 
   this.createGrid = function() {
 
-    for (var _y = 0; _y < this.grid_h; _y+=this.spacing_y) {
+    for (var _y = 0; _y < this.num_items_vert; _y++) {
 
-      for (var _x = 0; _x < this.grid_w; _x+=this.spacing_x) {
+      for (var _x = 0; _x < this.num_items_horiz; _x++) {
 
-        this.x.push(this.start.x + this.spacing_x/2 + _x);
-        this.y.push(this.start.y + this.spacing_y/2 + _y);
+        this.x.push(_x*this.spacing_x+ this.spacing_x/2);
+        this.y.push(_y*this.spacing_y+ this.spacing_y/2);
 
       }
     };
-
+    this.length = this.x.length;
   }
 
   this.add(_horiz, _vert);
@@ -676,6 +716,46 @@ function Grid(_num_items_horiz, _num_items_vert, _grid_w, _grid_h, _startx, _sta
   return this;
 
 }
+
+
+function colourPool(){
+
+  this.colours = [];
+  this.weights = [];
+  this.colour_list = [];
+
+  this.add = function(_colour, _weight){
+    if (_weight == undefined) _weight = 1;
+    this.colour_list.push(_colour);
+    this.weights.push(_weight);
+    this.pool  = this.generateWeighedList(this.colour_list, this.weights);
+    return this;
+  }
+
+  this.get = function(){
+    return this.pool[randomInt(this.pool.length-1)];
+  }
+
+  this.generateWeighedList = function(list, weight) {
+    var weighed_list = [];
+
+    // Loop over weights
+    for (var i = 0; i < weight.length; i++) {
+
+        var multiples = weight[i] * 100;
+
+        // Loop over the list of items
+        for (var j = 0; j < multiples; j++) {
+            weighed_list.push(list[i]);
+        }
+    }
+
+    return weighed_list;
+  };
+
+  return this;
+}
+
 
 ////// EFFECTS
 
