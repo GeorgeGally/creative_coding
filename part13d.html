@@ -16,55 +16,47 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var gw = 120;
-var gh = 20;
-var grid = new Grid(gw, gh);
-ctx.lineWidth = 0.2;
-console.log(grid);
 
-// create particles
-var balls = [];
-var number_of_balls = gw * gh;
-for (var i = 0; i < number_of_balls; i++) {
-  addBall(grid.x[i], grid.y[i], i);
-}
+var num_items = 200;
+var radius = 80;
+ctx.lineWidth = 2;
+var particles = [];
 
-function addBall(x, y, i){
-  var ball = {
-    x: x,
-    y: y,
-    sz: 10,
-    me: i
+// working out the angles
+// this was covered here: https://hackernoon.com/math-sin-and-math-cos-the-creative-coders-best-friend-597d69000644#.hs4cfjno1
+
+for (var i = 0; i < num_items; i++) {
+  var angle = radians(distributeAngles(i, num_items));
+  particles[i] = {
+    x: w/2 + Math.cos(angle) * radius,
+    y: h/2 + Math.sin(angle) * radius,
+    angle: angle
   }
-  balls.push(ball);
 }
+
 
 function draw(){
-  ctx.background(235);
-  for (var i = 0; i < balls.length; i++) {
-    var b = balls[i];
-    moveBall(b);
-    drawBall(b);
+
+  ctx.background(245);
+  //console.log(Mic.data);
+  for (var i = 0; i < particles.length; i++) {
+
+    var p = particles[i];
+    //var s = Mic.mapRawSound(i, particles.length, 0, 100);
+    var s = Mic.mapSound(i, particles.length, 10, 100);
+    // get a nice greyscale spectrum
+    //ctx.strokeStyle = rgb(map(i, 0, particles.length, 0, 255));
+    // get a nice colour spectrum
+    ctx.strokeStyle = hsl(map(i, 0, particles.length, 0, 360), 90, 50);
+
+    x2 = w/2 + Math.cos(p.angle) * (s + radius);
+		y2 = h/2 + Math.sin(p.angle) * (s + radius);
+    ctx.line(p.x, p.y, x2, y2);
+
   }
-}
-
-
-function moveBall(b){
-    var m = Math.round(mic.vols.length/2);
-    if(m > 0) {
-      var s = map(mic.vols[b.me%(m-1)], 0, 255, 4, grid.spacing_y - 2);
-      b.sz = tween(b.sz, s, 2);
-    }
-    b.y +=2;
-    if( b.y > h) b.y = 0;
-}
-
-
-function drawBall(b){
-    ctx.fillStyle = "black";
-    ctx.fillRect(b.x, b.y - b.sz, grid.spacing_x - 2, b.sz);
 
 }
+
 
 
 </script>

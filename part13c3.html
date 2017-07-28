@@ -20,7 +20,6 @@ var gw = 120;
 var gh = 20;
 var grid = new Grid(gw, gh);
 ctx.lineWidth = 0.2;
-var mode = 3;
 console.log(grid);
 
 // create particles
@@ -41,8 +40,7 @@ function addBall(x, y, i){
 }
 
 function draw(){
-  if (chance(500)) mode = randomInt(0,5);
-  ctx.background(0, 0.2);
+  ctx.background(235);
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     moveBall(b);
@@ -53,26 +51,17 @@ function draw(){
 
 function moveBall(b){
     var m = Math.round(Mic.spectrum.length/2);
-    if (mode == 0) {
-      var s = Mic.mapRawSound(b.me, balls.length, 10, 100);
-    } else if (mode == 1) {
-      var s = Mic.mapSound(b.me, balls.length, 10, 100);
-    } else {
+    if(m > 0) {
       var s = map(Mic.spectrum[b.me%(m-1)], 0, 255, 4, grid.spacing_y - 2);
+      b.sz = tween(b.sz, s, 2);
     }
-
-    if(s > 0) {
-
-    b.sz = tween(b.sz, s, 2);
-    }
-
     b.y +=2;
     if( b.y > h) b.y = 0;
 }
 
 
 function drawBall(b){
-    ctx.fillStyle = rgb(b.sz*5);
+    ctx.fillStyle = "black";
     ctx.fillRect(b.x, b.y - b.sz, grid.spacing_x - 2, b.sz);
 
 }

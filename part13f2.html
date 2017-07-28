@@ -16,19 +16,17 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var gw = 120;
-var gh = 20;
-var grid = new Grid(gw, gh);
+var balls = [];
+var grid;
+
 ctx.lineWidth = 0.2;
 var mode = 3;
+var speed = 2;
 console.log(grid);
 
 // create particles
-var balls = [];
-var number_of_balls = gw * gh;
-for (var i = 0; i < number_of_balls; i++) {
-  addBall(grid.x[i], grid.y[i], i);
-}
+reset();
+
 
 function addBall(x, y, i){
   var ball = {
@@ -41,7 +39,9 @@ function addBall(x, y, i){
 }
 
 function draw(){
-  if (chance(500)) mode = randomInt(0,5);
+  if (chance(200)) mode = randomInt(0,5);
+  if (chance(500)) speed *=-1;
+  if (chance(100)) reset();
   ctx.background(0, 0.2);
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
@@ -66,14 +66,33 @@ function moveBall(b){
     b.sz = tween(b.sz, s, 2);
     }
 
-    b.y +=2;
+    b.y += speed;
     if( b.y > h) b.y = 0;
+    if( b.y < 0) b.y = h;
 }
 
 
 function drawBall(b){
-    ctx.fillStyle = rgb(b.sz*5);
+    if (mode == 2 || mode == 1) {
+      //ctx.fillStyle = hsl(b.sz*2, 80, 50);
+      ctx.fillStyle = rgb(b.sz*5, 0, 0);
+    } else {
+      ctx.fillStyle = rgb(b.sz*5);
+    }
+
     ctx.fillRect(b.x, b.y - b.sz, grid.spacing_x - 2, b.sz);
+
+}
+
+function reset(){
+  var gw = randomInt(10, 150);
+  var gh = 20;
+  grid = new Grid(gw, gh);
+  balls = [];
+  var number_of_balls = gw * gh;
+  for (var i = 0; i < number_of_balls; i++) {
+    addBall(grid.x[i], grid.y[i], i);
+  }
 
 }
 

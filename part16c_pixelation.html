@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+
+// define the sample size
+
+var sample_size = randomInt(20, 80);
+//load an image
+var img = new Image();
+img.src = 'img/stevie-nicks2.jpg';
+
+function draw(){
+
+  if(chance(200)) sample_size = randomInt(10, 40);
+  // loop through the rows from to to bottom of page
+  ctx.drawImage(img, 0, 0, w, h);
+  pixelate(sample_size)
+}
+
+
+function pixelate(sample_size, _ctx){
+  var context = _ctx || ctx;
+  var sample = context.getImageData(0,0,w,h).data;
+
+  for (var y= 0; y < h; y+= sample_size) {
+    for (var x = 0; x < w; x+= sample_size) {
+
+     var pos = (x + y * w) * 4;
+     var red   = sample[pos];
+     var green = sample[pos + 1];
+     var blue  = sample[pos + 2];
+     context.fillStyle = rgb(red, blue, green);
+     context.fillRect(x, y, sample_size, sample_size);
+    }
+  }
+}
+
+
+</script>
+
+</body>
+
+</html>

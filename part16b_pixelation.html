@@ -5,10 +5,9 @@
 <meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-<script language="javascript" src="js/mic.js"></script>
+
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-
 
 </head>
 <body>
@@ -17,19 +16,22 @@
 
 var ctx = createCanvas("canvas1");
 
-// make a grid 200 wide
-var grid = new Grid(200, 1);
+// define the sample size
+var block_size = randomInt(20, 80);
 
 function draw(){
 
-  ctx.background(235);
+  if(chance(200)) block_size = randomInt(10, 40);
+  // loop through the rows from to to bottom of page
+  for (var y= 0; y < h; y+= block_size) {
 
-  for (var i = 0; i < grid.length; i++) {
-    var s = Mic.spectrum[i];
-    ctx.fillStyle = hsl(map(i, 0, grid.length, 0, 360), 80, 50);
-    ctx.fillRect(grid.x[i], h - s, grid.spacing_x-1, s);
+    // loop through all the columns from left to right
+    for (var x = 0; x < w; x+= block_size) {
+      ctx.fillStyle = rgb(random(205));
+      ctx.fillRect(x, y, block_size, block_size);
+    }
+
   }
-
 }
 
 

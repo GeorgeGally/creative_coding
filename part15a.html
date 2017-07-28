@@ -5,10 +5,10 @@
 <meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-<script language="javascript" src="js/mic.js"></script>
+
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-
+<link rel="stylesheet" href="css/audio.css" type="text/css" media="screen" />
 
 </head>
 <body>
@@ -38,16 +38,16 @@ for (var i = 0; i < num_items; i++) {
 function draw(){
 
   ctx.background(245);
-
+  //console.log(Mic.data);
   for (var i = 0; i < particles.length; i++) {
 
     var p = particles[i];
-    var s = Mic.mapSound(i, particles.length, 0, 100);
-
+    //var s = Mic.mapRawSound(i, particles.length, 0, 100);
+    var s = Sound.mapSound(i, particles.length, 10, 100);
     // get a nice greyscale spectrum
-    ctx.strokeStyle = rgb(map(i, 0, particles.length, 0, 255));
+    //ctx.strokeStyle = rgb(map(i, 0, particles.length, 0, 255));
     // get a nice colour spectrum
-    //ctx.strokeStyle = hsl(map(i, 0, particles.length, 0, 360), 90, 50);
+    ctx.strokeStyle = hsl(map(i, 0, particles.length, 0, 360), 90, 50);
 
     x2 = w/2 + Math.cos(p.angle) * (s + radius);
 		y2 = h/2 + Math.sin(p.angle) * (s + radius);
@@ -60,7 +60,7 @@ function draw(){
 
 
 </script>
-
+<script language="javascript" src="js/soundcloud.js"></script>
 </body>
 
 </html>

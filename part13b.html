@@ -7,7 +7,7 @@
 <script language="javascript" src="js/canvas.js"></script>
 <script language="javascript" src="js/mic.js"></script>
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" /> 
 
 
 </head>
@@ -16,68 +16,22 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-ctx.lineWidth = 0.2;
 
-// create particles
-var balls = [];
-var number_of_balls = 60;
-for (var i = 0; i < number_of_balls; i++) {
-  addBall(i);
-}
-
-function addBall(i){
-  var angle = radians(distributeAngles(i, number_of_balls));
-  var ball = {
-    angle: angle,
-    x: w/2 + Math.cos(angle) * 200,
-    y: h/2 + Math.sin(angle) * 200,
-    sz: random(10,80),
-    me: i
-  }
-  balls.push(ball);
-}
-
+// make a grid 200 wide
+var grid = new Grid(200, 1);
 
 function draw(){
+
   ctx.background(235);
-  for (var i = 0; i < balls.length; i++) {
-    var b = balls[i];
-    moveBall(b);
-    drawBall(b);
+
+  for (var i = 0; i < grid.length; i++) {
+    var s = Mic.spectrum[i];
+    ctx.fillStyle = hsl(map(i, 0, grid.length, 0, 360), 80, 50);
+    ctx.fillRect(grid.x[i], h - s, grid.spacing_x-1, s);
   }
-}
-
-
-function moveBall(b){
-
-    var s = Mic.mapSound(b.me, balls.length);
-    console.log(s);
-    b.sz = tween(b.sz, 50 + s, 4);
-    //console.log(b.sz);
-    b.x = w/2 + Math.cos(b.angle) * (160 + s/4);
-    b.y = h/2 + Math.sin(b.angle) * (160 + s/4);
-
-    if(b.x > w - b.sz/2 || b.x < b.sz/2){
-      b.speed_x *= -1;
-    }
-    if(b.y > h - b.sz/2 || b.y < b.sz/2) {
-      b.speed_y *= -1;
-    }
 
 }
 
-
-function drawBall(b){
-    ctx.strokeStyle = "black";
-    ctx.strokeEllipse(b.x, b.y, b.sz, b.sz);
-    ctx.fillStyle = "black";
-    ctx.fillEllipse(b.x, b.y, 4, 4);
-}
-
-
-function distributeAngles(me, total) {
-    return me/total * 360;
-}
 
 
 </script>

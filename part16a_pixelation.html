@@ -5,10 +5,9 @@
 <meta charset="utf-8">
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-<script language="javascript" src="js/mic.js"></script>
+
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-
 
 </head>
 <body>
@@ -17,19 +16,21 @@
 
 var ctx = createCanvas("canvas1");
 ctx.background(235);
-
-// make a grid 100 wide
-var grid = new Grid(200, 1);
+var block_size = randomInt(20, 80);
+var x = 0, y = 0;
 
 function draw(){
 
-  ctx.clearRect(0,0,w,h);
-
-  for (var i = 0; i < grid.length; i++) {
-    // Mic.mapSound(_me, _total, _min, _max)
-    var s = Mic.mapRawSound(i, grid.length, 10, h/4);
-    ctx.fillStyle = rgb(0);
-    ctx.fillRect(grid.x[i], grid.y[i] - s/2, grid.spacing_x-0.5, s);
+  ctx.fillStyle = rgb(random(205), 0, 0);
+  ctx.fillRect(x, y, block_size, block_size);
+  x += block_size;
+  if( x > w) {
+    x = 0; y+= block_size;
+  }
+  if(y > h) {
+    y = 0;
+    block_size = randomInt(20, 80);
+    ctx.background(235);
   }
 
 }

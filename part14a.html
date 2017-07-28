@@ -27,9 +27,25 @@ function draw(){
 
   for (var i = 0; i < grid.length; i++) {
     // Mic.mapSound(_me, _total, _min, _max)
-    var s = Mic.mapRawSound(i, grid.length, 10, h/4);
-    ctx.fillStyle = rgb(0);
-    ctx.fillRect(grid.x[i], grid.y[i] - s/2, grid.spacing_x-0.5, s);
+    var s = Mic.mapSound(i, grid.length, 0, h/4);
+    ctx.fillStyle = hsl(map(i, 0, grid.length, 0, 360), 80, 50);
+    ctx.fillRect(grid.x[i], h - s, grid.spacing_x-1, s);
+  }
+
+  var mix = Mic.getMix();
+  for (var i = 0; i < mix.bass.length; i++) {
+    var b = mix.bass[i];
+    ctx.fillEllipse(map(i, 0, mix.bass.length, 50, w- 50), h - h/4, b, b);
+  }
+
+  for (var i = 0; i < mix.mids.length; i++) {
+    var m = mix.mids[i];
+    ctx.fillEllipse(map(i, 0, mix.mids.length, 50, w- 50), h/2, m, m);
+  }
+
+  for (var i = 0; i < mix.highs.length; i++) {
+    var hs = mix.highs[i];
+    ctx.fillEllipse(map(i, 0, mix.highs.length, 50, w - 50), h/4, hs, hs);
   }
 
 }

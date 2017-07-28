@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/mic.js"></script>
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var balls = [];
+var grid;
+
+ctx.lineWidth = 0.2;
+var mode = 4;
+var speed = 2;
+var radius = 200;
+
+// create particles
+reset();
+console.log(grid);
+
+function addBall(x, y, i){
+  var angle = radians(distributeAngles(i, grid.length));
+  var ball = {
+    x: x,
+    y: y,
+    x2: x,
+    y2: y,
+    sz: 10,
+    angle: angle,
+    me: i
+  }
+  balls.push(ball);
+}
+
+function draw(){
+  if (chance(200)) mode = randomInt(0,6);
+  if (chance(500)) speed *=-1;
+  if (chance(100)) reset();
+  ctx.background(0, 0.2);
+  for (var i = 0; i < balls.length; i++) {
+    var b = balls[i];
+    moveBall(b);
+    drawBall(b);
+  }
+}
+
+
+function moveBall(b){
+    var m = Math.round(Mic.spectrum.length/2);
+    if (mode == 0) {
+      var s = Mic.mapRawSound(b.me, balls.length, 10, 100);
+    } else if (mode == 1) {
+      var s = Mic.mapSound(b.me, balls.length, 10, 100);
+    } else {
+      var s = map(Mic.spectrum[b.me%(m-1)], 0, 255, 4, grid.spacing_y - 2);
+    }
+
+    if(s > 0) {
+
+    b.sz = tween(b.sz, s, 2);
+    }
+
+    b.y += speed;
+    if( b.y > h) b.y = 0;
+    if( b.y < 0) b.y = h;
+}
+
+
+function drawBall(b){
+    if (mode == 2 || mode == 1) {
+      //ctx.fillStyle = hsl(b.sz*2, 80, 50);
+      ctx.fillStyle = rgb(b.sz*5, 0, 0);
+    } else {
+      ctx.fillStyle = rgb(b.sz*5);
+    }
+    if (mode == 4) {
+      ctx.strokeStyle = rgb(255);
+      b.x2 = w/2 + Math.cos(b.angle) * radius;
+      b.y2 = h/2 + Math.sin(b.angle) * radius;
+      //console.log(b.x2);
+      // b.x2 = tween(b.x, x2, 10);
+      // b.y2 = tween(b.y, y2, 10);
+      x2 = w/2 + Math.cos(b.angle) * (2*b.sz + radius);
+  		y2 = h/2 + Math.sin(b.angle) * (2*b.sz + radius);
+      ctx.line(p.x2, p.y2, x2, y2);
+      //console.log(x2);
+      ctx.save();
+      ctx.translate(b.x2, b.y2);
+      ctx.rotate(b.angle);
+      ctx.fillRect(0,0, grid.spacing_x - 2, 10 * b.sz);
+      ctx.restore();
+    } else {
+      ctx.fillRect(b.x, b.y - b.sz, grid.spacing_x - 2, b.sz);
+    }
+
+
+}
+
+function reset(){
+  var gw = randomInt(10, 150);
+  var gh = 20;
+  grid = new Grid(gw, gh);
+  balls = [];
+  var number_of_balls = gw * gh;
+  for (var i = 0; i < number_of_balls; i++) {
+    addBall(grid.x[i], grid.y[i], i);
+  }
+
+}
+
+
+</script>
+
+</body>
+
+</html>

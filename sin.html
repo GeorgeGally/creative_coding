@@ -2,13 +2,14 @@
 <html>
 <title>Creative Coding Yea!</title>
 <head>
+
 <meta charset="utf-8">
+
 <script language="javascript" src="js/creative_coding.js"></script>
 <script language="javascript" src="js/canvas.js"></script>
-<script language="javascript" src="js/mic.js"></script>
+
 <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
-
 
 </head>
 <body>
@@ -16,28 +17,24 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-ctx.background(235);
-
-// make a grid 100 wide
-var grid = new Grid(200, 1);
-
+var radius = 200;
 function draw(){
+  ctx.background(0);
+  ctx.fillStyle = rgb(255,0,0);
+  console.log(degrees(Math.sin(frameCount)));
+  //x = Math.cos(angle) * radius;
+  //y = Math.cos(angle) * radius;
+  var x = w/2 + Math.cos(frameCount/50) * w/2;
+  //var y = h/2 + Math.sin(frameCount/10) * 100;
+  var y = h/2;
+  //console.log(x);
+  ctx.fillEllipse(x, y, 120, 120);
+  // console.log("mouseX:" + mouseX + " mouseY: " + mouseY);
 
-  ctx.clearRect(0,0,w,h);
-
-  for (var i = 0; i < grid.length; i++) {
-    // Mic.mapSound(_me, _total, _min, _max)
-    var s = Mic.mapSound(i, grid.length, 10, h/4);
-    ctx.fillStyle = rgb(0);
-    ctx.fillRect(grid.x[i], grid.y[i] - s/2, grid.spacing_x-0.5, s);
-  }
-
-}
-
+} // end draw
 
 
 </script>
-
 </body>
 
 </html>

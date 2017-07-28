@@ -16,31 +16,32 @@
 <script>
 
 var ctx = createCanvas("canvas1");
-var gw = 120;
-var gh = 20;
-var grid = new Grid(gw, gh);
-ctx.lineWidth = 0.2;
-console.log(grid);
+ctx.lineWidth = 1;
 
 // create particles
 var balls = [];
-var number_of_balls = gw * gh;
+var number_of_balls = 100;
+var radius = 140;
+
 for (var i = 0; i < number_of_balls; i++) {
-  addBall(grid.x[i], grid.y[i], i);
+  addBall(i);
 }
 
-function addBall(x, y, i){
+function addBall(i){
+  var angle = radians(distributeAngles(i, number_of_balls));
   var ball = {
-    x: x,
-    y: y,
-    sz: 10,
+    angle: angle,
+    x: w/2,
+    y: h/2,
+    sz: random(10,80),
     me: i
   }
   balls.push(ball);
 }
 
+
 function draw(){
-  ctx.background(0, 0.2);
+  ctx.background(0);
   for (var i = 0; i < balls.length; i++) {
     var b = balls[i];
     moveBall(b);
@@ -50,20 +51,26 @@ function draw(){
 
 
 function moveBall(b){
-    var m = Math.round(mic.vols.length/2);
-    if(m > 0) {
-      var s = map(mic.vols[b.me%(m-1)], 0, 255, 4, grid.spacing_y - 2);
-      b.sz = tween(b.sz, s, 2);
-    }
-    b.y +=2;
-    if( b.y > h) b.y = 0;
+
+    var s = Mic.mapSound(b.me, balls.length, 40, 60);
+    b.sz = tween(b.sz, s, 4);
+    //console.log(b.sz);
+    b.x = tween(b.x, w/2 + Math.cos(b.angle) * (radius + s/4), 10);
+    b.y = tween(b.y, h/2 + Math.sin(b.angle) * (radius + s/4), 10);
+
 }
 
 
 function drawBall(b){
-    ctx.fillStyle = rgb(b.sz*5);
-    ctx.fillRect(b.x, b.y - b.sz, grid.spacing_x - 2, b.sz);
+    ctx.strokeStyle = "white";
+    ctx.strokeEllipse(b.x, b.y, b.sz, b.sz);
+    ctx.fillStyle = "white";
+    ctx.fillEllipse(b.x, b.y, 4, 4);
+}
 
+
+function distributeAngles(me, total) {
+    return me/total * 360;
 }
 
 

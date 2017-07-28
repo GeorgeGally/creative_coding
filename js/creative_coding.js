@@ -507,7 +507,7 @@ function tween(pos, target, speed){
 }
 
 function chance(value){
- if (random(value) > value-1) return true;
+ return (random(value) > value-1);
 }
 
 function posNeg(){
@@ -759,6 +759,57 @@ function colourPool(){
 
 ////// EFFECTS
 
+p.pixelate = function (blocksize,blockshape) {
+  if (blockshape == undefined) blockshape = 0;
+  if (blocksize == undefined) blocksize = 20;
+  var imgData=ctx.getImageData(0,0,w,h);
+
+  ctx.clearRect(0,0,w,h);
+  //console.log(blockshape)
+  if (blockshape == 3) {
+    ctx.background(0);
+  }
+
+    var buffer = new Uint8Array(imgData.data.buffer);
+    for(var x = 0; x < w; x += blocksize)
+    {
+        for(var y = 0; y < h; y += blocksize)
+        {
+
+          var pos = (x + y * w);
+          var b = (buffer[pos] >> 16) & 0xff;
+          var g = (buffer[pos] >> 8) & 0xff;
+          var r = (buffer[pos] >> 0) & 0xff;
+          this.fillStyle = rgb(r,g,b);
+          if (blockshape == 0) {
+            this.fillRect(x, y, blocksize, blocksize);
+          } else if (blockshape == 1) {
+          	this.fillEllipse(x, y, blocksize, blocksize);
+          } else if (blockshape == 2) {
+          	var bb = brightness(r,g,b);
+          	this.fillStyle = (bb < 40 ? rgb(0) : rgb(255));
+            this.fillEllipse(x, y, blocksize-1, blocksize-1);
+           } else if (blockshape == 3) {
+            this.fillStyle = rgb(r,g,b);
+            this.fillEllipse(x, y, blocksize-3, blocksize-3);
+          } else {
+          	var bb = brightness(r,g,b);
+          	if (bb< 40) {
+          		this.fillStyle = rgb(0);
+          		this.fillEllipse(x, y, blocksize-1, blocksize-1);
+          	} else {
+          		this.fillStyle = rgb(255);
+          		this.fillEllipse(x, y, blocksize-1, blocksize-1);
+            	this.strokeEllipse(x, y, blocksize, blocksize);
+          	}
+          };
+
+        }
+    }
+
+}
+
+
 function pixelate(blocksize,blockshape) {
   if (blockshape == undefined) blockshape = 0;
   if (blocksize == undefined) blocksize = 20;
@@ -770,18 +821,16 @@ function pixelate(blocksize,blockshape) {
     ctx.background(0);
   }
 
-    //var sourceBuffer8 = new Uint8Array(imgData.data.buffer);
-    //var sourceBuffer8 = new Uint8ClampedArray(imgData.data.buffer);
-    var sourceBuffer32 = new Uint32Array(imgData.data.buffer);
+    var buffer = new Uint8Array(imgData.data.buffer);
     for(var x = 0; x < w; x += blocksize)
     {
         for(var y = 0; y < h; y += blocksize)
         {
 
           var pos = (x + y * w);
-          var b = (sourceBuffer32[pos] >> 16) & 0xff;
-          var g = (sourceBuffer32[pos] >> 8) & 0xff;
-          var r = (sourceBuffer32[pos] >> 0) & 0xff;
+          var b = (buffer[pos] >> 16) & 0xff;
+          var g = (buffer[pos] >> 8) & 0xff;
+          var r = (buffer[pos] >> 0) & 0xff;
           ctx.fillStyle = rgb(r,g,b);
           if (blockshape == 0) {
             ctx.fillRect(x, y, blocksize, blocksize);
@@ -978,6 +1027,7 @@ function triangulate(grid_w, grid_h, alpha) {
 }
 
 }
+
 
 
 // MIRROR THE CANVAS
