@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/video.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var sample_size = 50;
+var old = [];
+var threshold = 10;
+
+function draw(){
+  ctx.drawImage(video, 0, 0, w, h);
+  var data = ctx.getImageData(0, 0, w, h).data;
+
+  for (var y = 0; y < h; y+= sample_size) {
+    for (var x = 0; x < w; x+= sample_size) {
+
+      var pos = (x + y * w) * 4;
+      var r = data[pos];
+      var g = data[pos+1];
+      var b = data[pos+2];
+
+      if(old[pos] && Math.abs(old[pos].red - r) > threshold) {
+        ctx.fillStyle = rgb(r, g, b);
+        ctx.fillRect(x, y, sample_size, sample_size);
+      }
+
+      old[pos] = { red: r, green: g, blue: b};
+
+    }
+  }
+
+}
+
+
+
+</script>
+
+</body>
+
+</html>

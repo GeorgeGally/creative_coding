@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<title>Creative Coding Yea!</title>
+<head>
+<meta charset="utf-8">
+<script language="javascript" src="js/creative_coding.js"></script>
+<script language="javascript" src="js/canvas.js"></script>
+<script language="javascript" src="js/video.js"></script>
+<script language="javascript" src="js/quicksettings.min.js"></script>
+
+<link rel="stylesheet" href="css/reset.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen" />
+
+</head>
+<body>
+
+<script>
+
+var ctx = createCanvas("canvas1");
+var ctx2 = createHiddenCanvas("canvas2");
+
+var sample_size = 20;
+var old = [];
+var threshold = 40;
+var settings = QuickSettings.create();
+
+var particles = [];
+ctx.background(0);
+
+
+settings.addRange("sample_size", 5, 200, sample_size, 1, function(value) {
+  sample_size = value;
+});
+settings.addRange("threshold", 5, 100, threshold, 1, function(value) {
+  threshold = value;
+});
+
+function draw(){
+  ctx2.drawImage(video, 0, 0, w, h);
+  var data = ctx2.getImageData(0, 0, w, h).data;
+
+  ctx.background(0, 0.05);
+
+  for (var y = 0; y < h; y+= sample_size) {
+    for (var x = 0; x < w; x+= sample_size) {
+
+      var pos = (x + y * w) * 4;
+      var r = data[pos];
+      var g = data[pos+1];
+      var b = data[pos+2];
+
+      if(old[pos] && Math.abs(old[pos].red - r) > threshold) {
+        var sz = brightness(r, g, b, sample_size);
+        var c = rgb(r, g, b);
+        addParticle(w-x, y, c, sz)
+      }
+
+      old[pos] = { red: r, green: g, blue: b};
+
+    }
+  }
+
+  moveParticles();
+  drawParticles();
+
+}
+
+
+function addParticle(_x, _y, _c, _sz){
+  var particle = {
+    x: _x,
+    y: _y,
+    me: particles.length,
+    speed_x: random(-1, 1),
+    speed_y: random(-6, 2),
+    sz: random(10,30),
+    c: _c,
+  }
+  particles.push(particle);
+}
+
+
+function moveParticles(){
+
+  for (var i = particles.length-1; i > 0; i--) {
+    var p = particles[i];
+    p.x += p.speed_x;
+    p.y += p.speed_y;
+    p.speed_y += 0.2;
+    p.sz -= 0.4;
+    if(p.x > w || p.x < 0 || p.y > w || p.y < 0 || p.sz < 0.1) {
+      particles.splice(p.me, 1);
+      //i--;
+    };
+  }
+
+}
+
+
+function drawParticles(){
+
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    ctx.fillStyle = p.c;
+    ctx.fillEllipse(p.x, p.y, p.sz, p.sz);
+  }
+
+}
+
+
+
+
+</script>
+
+</body>
+
+</html>

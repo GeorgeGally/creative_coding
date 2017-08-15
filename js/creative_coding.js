@@ -365,8 +365,9 @@ return 'rgba('+clamp(Math.round(r),0,255)+', '+clamp(Math.round(g),0,255)+', '+c
 function hsl(h, s, l) { return 'hsl('+h+', '+clamp(s,0,100)+'%, '+clamp(l,0,100)+'%)';};
 function hsla(h, s, l, a) { return 'hsla('+h+', '+clamp(s,0,100)+'%, '+clamp(l,0,100)+'%, '+clamp(a,0,1)+')';};
 
-function brightness(r, g, b){
-      return Math.floor(rgbToHsl(r, g, b)[2]*100);
+function brightness(r, g, b, sz){
+      var sz = sz || 100;
+      return Math.floor(rgbToHsl(r, g, b)[2]*sz);
     };
 
 function rgbToHsl(r, g, b){
