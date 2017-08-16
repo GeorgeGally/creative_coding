@@ -19,41 +19,38 @@
 var ctx = createCanvas("canvas1");
 var ctx2 = createHiddenCanvas("canvas2");
 
-var scalefactor = 40;
+var sample_size = 20;
 var old = [];
 var threshold = 40;
+var scalefactor = 40;
 var settings = QuickSettings.create();
 
+var particles = [];
+ctx.background(0);
 
 function setup(){
 video.width = w/scalefactor;
 video.height = h/scalefactor;
 }
 
-
-
 settings.addRange("threshold", 5, 100, threshold, 1, function(value) {
   threshold = value;
 });
 
 function draw(){
-  ctx2.drawImage(video, 0, 0, w, h);
-  var data = ctx2.getImageData(0, 0, w, h).data;
+
 
   ctx.background(0, 0.05);
   var motion = motionDetection();
-
   for (var i = 0; i < motion.length; i++) {
     var m = motion[i];
-    ctx.fillStyle = rgb(m.r, m.g, m.b);
-    ctx.fillEllipse(m.x, m.y, scalefactor, scalefactor);
-    ctx.fillStyle = rgb(0);
-    ctx.fillEllipse(m.x, m.y, scalefactor/2, scalefactor/2);
+    addParticle(m);
   }
 
+  moveParticles();
+  drawParticles();
+
 }
-
-
 
 function motionDetection(){
   var motion = [];
@@ -79,6 +76,49 @@ function motionDetection(){
 
 return motion;
 }
+
+function addParticle(m){
+  var particle = {
+    x: m.x + random(-sample_size/2, sample_size/2),
+    y: m.y,
+    me: particles.length,
+    speed_x: random(-1, 1),
+    speed_y: random(-6, 2),
+    sz: 10,
+    c: rgb(m.r, m.g, m.b),
+  }
+  particles.push(particle);
+}
+
+
+function moveParticles(){
+
+  for (var i = particles.length-1; i > 0; i--) {
+    var p = particles[i];
+    p.x += p.speed_x;
+    p.y += p.speed_y;
+    p.speed_y -= 0.2;
+    p.sz += 0.4;
+    if(p.x > w || p.x < 0 || p.y > w || p.y < 0) {
+      particles.splice(p.me, 1);
+      //i--;
+    };
+  }
+
+}
+
+
+function drawParticles(){
+
+  for (var i = 0; i < particles.length; i++) {
+    var p = particles[i];
+    ctx.fillStyle = p.c;
+    ctx.fillEllipse(p.x, p.y, p.sz, p.sz);
+  }
+
+}
+
+
 
 
 </script>
